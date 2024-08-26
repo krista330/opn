@@ -27,3 +27,20 @@ public class MyController {
         <apex:commandButton value="Save" action="{!save}" />
     </apex:form>
 </apex:page>
+
+
+
+public class TimeFormatValidator {
+    public static void validateTimeFormat(String input) {
+        // 正規表現パターン: 00:00から23:59までの時間形式
+        String timePattern = '^([01]?[0-9]|2[0-3]):[0-5][0-9]$';
+        
+        // 入力が正規表現パターンに一致しない場合、エラーをスロー
+        if (!Pattern.matches(timePattern, input)) {
+            throw new TimeFormatException('Invalid time format. Please use hh:mm format.');
+        }
+    }
+    
+    // カスタム例外クラス
+    public class TimeFormatException extends Exception {}
+}
