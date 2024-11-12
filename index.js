@@ -1,3 +1,28 @@
+<apex:page controller="MyController">
+    <h1>Visualforce 页面示例</h1>
+    
+    <!-- 触发第一个 Apex 方法 -->
+    <apex:commandLink value="点击此处" action="{!firstApexMethod}" reRender="dummyPanel" 
+                      onclick="showPopup(); return false;" />
+
+    <!-- 空的 outputPanel，用于触发 reRender -->
+    <apex:outputPanel id="dummyPanel"></apex:outputPanel>
+
+    <!-- 第二个 Apex 方法，通过 actionFunction 调用 -->
+    <apex:actionFunction name="callSecondApexMethod" action="{!secondApexMethod}" />
+
+    <script>
+        // 显示弹出框
+        function showPopup() {
+            // 显示弹出框
+            alert("第一个 Apex 方法执行完成！");
+
+            // 关闭弹出框后调用第二个Apex方法
+            callSecondApexMethod();
+        }
+    </script>
+</apex:page>
+                          
 アプリケーションのコードやキャッシングの最適化が行われた場合、メモリ使用率が一時的に高くても安定して処理できることがあります。
 
 
