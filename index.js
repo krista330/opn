@@ -1,4 +1,13 @@
-<apex:page controller="MyController">
+    <apex:outputPanel id="dummyPanel">
+        <!-- 使用 apex:outputText 将 showPopup 的值渲染到页面 -->
+        <apex:outputText id="showPopupValue" value="{!IF(showPopup, 'true', 'false')}" style="display:none;" />
+    </apex:outputPanel>
+
+        var showPopup = document.getElementById("showPopupValue").innerText.trim();
+        
+        
+        
+        <apex:page controller="MyController">
     <h1>Visualforce 页面示例</h1>
 
     <!-- 点击按钮触发第一个 Apex 方法 -->
