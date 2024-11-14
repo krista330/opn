@@ -1,4 +1,7 @@
-    <apex:outputPanel id="dummyPanel">
+"I’d like to highlight an important point regarding the use of the Dev environment. According to our updates in the ‘Hearing Sheet.xlsx,’ we’ve identified that other teams also plan to use the Dev environment within the same time period. This overlap could lead to potential resource conflicts or delays. Could we discuss possible adjustments to avoid any issues or ensure we’re aligned on usage?"
+
+
+<apex:outputPanel id="dummyPanel">
         <!-- 使用 apex:outputText 将 showPopup 的值渲染到页面 -->
         <apex:outputText id="showPopupValue" value="{!IF(showPopup, 'true', 'false')}" style="display:none;" />
     </apex:outputPanel>
