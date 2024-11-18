@@ -1,6 +1,38 @@
-"I’d like to highlight an important point regarding the use of the Dev environment. According to our updates in the ‘Hearing Sheet.xlsx,’ we’ve identified that other teams also plan to use the Dev environment within the same time period. This overlap could lead to potential resource conflicts or delays. Could we discuss possible adjustments to avoid any issues or ensure we’re aligned on usage?"
+Python Upgrade: Function Duplication Considerations
+1. Data Factory and Front Door Integration
+Current Function call: via Front Door URL.
+Challenge:
+Managing two Linked Services in Data Factory increases workload.
+Parallel development is not feasible due to sequential switching via Front Door.
+Solution:
+For UI cleanup & unit tests: Direct Function URL calls allow independent development.
+2. Parallel Development for Shared Resources
+Resources involved:
+Storage Accounts
+SQL Databases
+Key Considerations:
+Assess feasibility of parallel usage within the same environment.
+Confirm if data inconsistencies might arise during concurrent operations.
+Mitigation Plan:
+Usage coordination or scheduled access may be necessary if conflicts are detected.
+3. Recommendations for Efficient Development
+Direct Function Access:
+Use direct URL calls for development/testing to enable parallel efforts.
+Resource Impact Assessment:
+Analyze shared resource access to prevent conflicts.
+Communication & Coordination:
+Regular syncs to align development schedules and minimize disruptions.
+Visual Example (Optional)
+Include a diagram like this:
+
+Data Flow with Front Door (for production).
+Direct Access Flow (for testing/development).
+This contrast visually explains the rationale behind bypassing Front Door during development.
 
 
+
+
+        
 <apex:outputPanel id="dummyPanel">
         <!-- 使用 apex:outputText 将 showPopup 的值渲染到页面 -->
         <apex:outputText id="showPopupValue" value="{!IF(showPopup, 'true', 'false')}" style="display:none;" />
