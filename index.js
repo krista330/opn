@@ -1,3 +1,9 @@
+In Data Factory, Functions are called via a Front Door URL. Creating two Linked Services is too labor-intensive. While Front Door allows switching, parallel development is not possible, requiring usage coordination.
+
+For UI cleanup and Function unit testing, direct URL calls instead of Front Door can enable parallel development.
+
+Verify if parallel use of Storage Account and SQL DB is feasible without causing data inconsistencies in the same environment. If not, usage coordination may be required during development.
+
 Python Upgrade: Function Duplication Considerations
 1. Data Factory and Front Door Integration
 Current Function call: via Front Door URL.
