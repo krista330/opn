@@ -1,3 +1,14 @@
+To describe this in PowerPoint in English, you can use the following:
+	1.	Slide Title: “Inherited Permissions Issue”
+	2.	Description:
+	•	“The two ‘unknown’ identities listed in the Access Control (IAM) section are contributors whose permissions are inherited from the subscription level.”
+	•	“These errors indicate that the identities are not found and may result in issues across all resources under this subscription.”
+	3.	Additional Notes:
+	•	“It is unclear whether this error impacts all resources. Further investigation is required to determine the scope of the issue and identify the missing identities.”
+
+This format can help communicate the issue clearly and professionally in your presentation. If you want further customization or diagrams, let me know!
+
+
 Error Message in the Image:
 
 The error message in the screenshot states:
