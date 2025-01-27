@@ -1,3 +1,39 @@
+Error Message in the Image:
+
+The error message in the screenshot states:
+“Identity not found. Unable to find identity.”
+
+Possible Cause:
+
+This error occurs when a listed identity (e.g., App, User, or Service Principal) in the Access Control (IAM) for the resource no longer exists or cannot be resolved. Common reasons include:
+	1.	The identity was deleted from Azure Active Directory or removed from the subscription.
+	2.	There are sync or metadata issues between Azure AD and the resource.
+
+Recommended Resolution:
+	1.	Audit and Review:
+	•	Identify the purpose of the unknown identity in the Access Control (IAM) list.
+	•	Review Azure AD logs to check if the identity was deleted or renamed.
+	•	Use the Activity Log in Azure to check if this identity was actively being used.
+	2.	Remove the Orphaned Identity:
+	•	If the identity is no longer valid or needed, remove it from the Access Control (IAM) to clean up the permissions.
+	3.	Restore Identity:
+	•	If the identity was accidentally deleted or is still required, restore it in Azure AD (if possible).
+	•	Alternatively, create a new identity and assign the required roles.
+	4.	Contact Support (if necessary):
+	•	If the identity is critical and no information is available, contact Azure support for assistance in identifying the issue.
+
+Risks of Not Resolving the Issue:
+	1.	Security Risk: The resource may have unresolved or unnecessary permissions assigned to non-existent identities, leading to potential misuse if identities are incorrectly re-added.
+	2.	Operational Issues: If the identity is still required for a legitimate purpose, services relying on this identity could fail.
+	3.	Compliance Risk: An untracked or unresolvable identity may lead to non-compliance with organizational or regulatory requirements.
+
+Recommended Approach:
+	1.	Prioritize investigating the unknown identity to confirm whether it is critical or obsolete.
+	2.	Remove the identity promptly if it is not required.
+	3.	Regularly audit and update IAM permissions to ensure all roles and identities are accurate.
+
+
+
 「Export and Import」方法に分類される移行ツールとして、主に BACPAC ファイルを使用してデータベースを移行するためのツールがあります。
   この方法は、データベースのスキーマとデータを含むファイルをエクスポートして移行先でインポートするプロセスです。以下に代表的なツールをご紹介します。
 
