@@ -1,184 +1,81 @@
-FSCとして利用可能なオブジェクトとSalesforce規約との対応表
+Salesforce Financial Services Cloud（FSC）では、金融業界向けに特化したさまざまなオブジェクトと権限が提供されています。以下に、FSCで利用可能な主なオブジェクトと権限のリストをまとめます。
 
-オブジェクト名
+主なオブジェクト:
 
-FSCとして利用可能
-
-規約上の名称
-
-取引先 (Account)
-
-〇
-
-取引先
-
-取引先責任者 (Contact)
-
-〇
-
-取引先責任者
-
-活動 (Activity)
-
-〇
-
-活動
-
-ToDo (Task)
-
-〇
-
+取引先（Account）
+金融取引先（Financial Account）
+世帯（Household）
+リレーショングループ（Relationship Group）
+取引先責任者（Contact）
+商談（Opportunity）
+活動（Activity）
 ToDo
-
-カレンダー (Calendar)
-
-〇
-
 カレンダー
-
-行動 (Event)
-
-〇
-
-行動
-
-商談 (Opportunity)
-
-〇
-
-商談
-
-B2C & B2Bデータモデル
-
-〇
-
-B2C および B2B データモデル
-
-金融取引先 (Financial Account)
-
-〇
-
-金融取引先
-
-金融取引先トランザクション (Financial Account Transaction)
-
-〇
-
-金融取引先トランザクション
-
-世帯 (Household)
-
-〇
-
-世帯およびリレーショングループ
-
-リレーショングループ (Relationship Group)
-
-〇
-
-世帯およびリレーショングループ
-
-リレーションマップ (Relationship Map)
-
-〇
-
-リレーションマップ
-
-クライアントおよび世帯プロファイル (Client & Household Profile)
-
-〇
-
-クライアントおよび世帯プロファイル
-
-アラート/通知 (Alerts/Notifications)
-
-〇
-
-アラート/通知
-
-Lightning フロー (Lightning Flow)
-
-〇
-
-Lightning フロー
-
-ライフイベント (Life Events)
-
-〇
-
-ライフイベント
-
-個人取引先 (Person Account)
-
-〇
-
-個人取引先
-
-FSCで利用可能な機能・権限一覧
-
-(1) ユーザ機能
-
-オフライン機能
-
-Lightning フロー自動化
-
-ワークフロー & 承認
-
-(2) ユーザ許可
+行動（Action）
+コンテンツ（Content）
+ドキュメント（Document）
+金融取引先トランザクション（Financial Account Transaction）
+ライフイベント（Life Event）
+アラート/通知（Alert/Notification）
+主なユーザー権限:
 
 Chatter
-
 プロセス & フローの作成
-
 ワークフロー & 承認プロセスの作成
-
 カスタム権限セット
-
 レポートのカスタマイズ
-
 ダッシュボードのカスタマイズ
-
-ユーザおよびプロファイルの管理
-
+ユーザーおよびプロファイルの管理
 組織によるカスタムプロファイルおよびページレイアウトの許可
-
 組織によるレコードタイプの許可
-
-Rollup summaries
-
+ロールアップサマリー
 メール送信
+Apexコードの作成
+これらのオブジェクトや権限は、FSCの機能を最大限に活用するために重要な要素となります。詳細な情報や最新のリストについては、Salesforceの公式ドキュメントやヘルプページをご参照ください。
 
-Write Apex Code
 
-(3) その他の機能
+情報源
 
-Salesforce モバイルアプリケーション
 
-重複ブロック
 
-フルオフラインモバイル機能
 
-AppExchange
 
-注意点
+あなた:
+上記以外に利用禁止ですか？利用したら費用発生しますか？
+ChatGPT:
+ChatGPT
+Financial Services Cloud（FSC）では、特定のオブジェクトや権限の使用が制限されている場合があります。これらの制限を超えて追加の機能や制限の拡張を依頼する場合、Salesforceサポートによって取り扱われ、ほとんどの場合無料で利用できますが、特定の機能や制限の変更には期限が設けられていることがあります。 
+HELP.SALESFORCE.COM
 
-FSCユーザライセンスは「Salesforce」ライセンスを使用するため、設定レベルで制御されない。
+FSCの利用可能なオブジェクトや権限の詳細については、Salesforceの公式ドキュメントやサポートにお問い合わせいただくことをお勧めします。
 
-Salesforce社の定期的なモニタリングによる違反チェックに注意が必要。
 
-規約に記載されていないオブジェクト・機能の利用は禁止。
+情報源
 
-上記リスト外のカスタムオブジェクトを追加する場合は、Salesforce規約と整合性を取ることが必須。
 
-今後の対応
 
-要件定義時点でオブジェクト・権限の整理を実施
 
-設定時のオブジェクト・権限の適用範囲を明確化
 
-定期的なFSC環境の監査を実施し、Salesforce規約違反を防止
 
-このドキュメントは、FSCの要件定義フェーズにおける基準として活用してください。
+あなた:
+上面个两个问题的情报源请列出来
+ChatGPT:
+ChatGPT
+Financial Services Cloud（FSC）における利用可能なオブジェクトや権限、ならびに利用制限や追加費用に関する情報源として、以下のリソースをご参照いただくことをお勧めします：
+
+Salesforce Financial Services Cloud 概要： FSCで提供される主な機能やオブジェクトについて詳しく説明されています。
+
+URL: https://help.salesforce.com/s/articleView?id=sf.financial_services_cloud.htm&type=5
+Salesforce Financial Services Cloud 実装ガイド： FSCの設定やカスタマイズに関する詳細な手順が記載されています。
+
+URL: https://help.salesforce.com/s/articleView?id=sf.financial_services_cloud_implementation_guide.htm&type=5
+Salesforce Financial Services Cloud ライセンスと権限： FSCで利用可能な権限セットやライセンスに関する情報が提供されています。
+
+URL: https://help.salesforce.com/s/articleView?id=sf.financial_services_cloud_licenses_permissions.htm&type=5
+これらのリソースを参照することで、FSCにおける利用可能なオブジェクトや権限、ならびに利用制限や追加費用に関する詳細な情報を得ることができます。
+
+
+情報源
 
 
 
