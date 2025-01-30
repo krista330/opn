@@ -1,3 +1,52 @@
+Impact of Disabling SCM and FTP Basic Authentication in Azure App Service
+
+🔒 1. Changes to SCM (Kudu) Access
+	•	Before (Enabled):
+	•	Users can access Kudu (SCM service) via a simple username and password.
+	•	Developers and DevOps teams can manually deploy, debug, and manage files through Kudu.
+	•	After (Disabled):
+	•	Users cannot log in to Kudu with basic authentication anymore.
+	•	They must use Azure AD authentication, SSH keys, or OAuth instead.
+	•	Automated deployment pipelines (e.g., GitHub Actions, Azure DevOps) will not be affected if they use secure authentication methods.
+
+📂 2. Changes to FTP Access
+	•	Before (Enabled):
+	•	Users can connect to the FTP server using their FTP username and password.
+	•	They can manually upload/download files via FTP clients (e.g., FileZilla, WinSCP).
+	•	After (Disabled):
+	•	FTP logins using username/password will no longer work.
+	•	Users must switch to FTPS (encrypted FTP), SFTP, or Azure Blob Storage for file management.
+
+📌 3. Potential Operational Impacts
+
+Feature	Impact After Disabling Basic Authentication	Alternative Solutions
+Manual SCM (Kudu) Access	Users cannot log in with a username & password	Use Azure AD authentication or OAuth
+FTP File Uploads/Downloads	Cannot use plain FTP credentials	Use FTPS, SFTP, or Azure Blob Storage
+Automated Deployments	May fail if using basic authentication	Use Azure DevOps, GitHub Actions, or SSH authentication
+Third-Party FTP Integrations	May stop working	Switch to secure file transfer methods (FTPS/SFTP)
+
+✅ Recommended Next Steps to Minimize Disruptions
+
+1️⃣ Identify all users and services currently using SCM or FTP with basic authentication.
+2️⃣ Migrate SCM authentication to:
+	•	Azure AD authentication (Preferred for enterprises).
+	•	OAuth-based authentication for secure API access.
+	•	SSH keys for automated deployments.
+3️⃣ Replace FTP with Secure Alternatives:
+	•	FTPS or SFTP for secure file transfer.
+	•	Azure Blob Storage for file management instead of FTP.
+4️⃣ Update documentation and notify affected users about the authentication changes.
+5️⃣ Test new authentication methods before fully disabling basic authentication.
+
+🚀 Summary
+	•	Disabling SCM and FTP basic authentication improves security but requires users to switch to modern authentication methods.
+	•	Most automated deployment tools (e.g., GitHub Actions, Azure DevOps) will not be affected if they are already using OAuth or SSH.
+	•	For file management, replacing FTP with FTPS, SFTP, or Azure Blob Storage ensures secure data transfer.
+
+If needed, implement the changes in a phased approach to avoid disruptions. 🔄
+
+
+
 Security Risks of Enabling SCM and FTP Basic Authentication
 
 1. Credential Vulnerability
