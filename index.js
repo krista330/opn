@@ -1,3 +1,42 @@
+Security Risks of Enabling SCM and FTP Basic Authentication
+
+1. Credential Vulnerability
+	•	Basic authentication relies solely on username and password, making it susceptible to credential theft.
+	•	If credentials are leaked, unauthorized users can gain full access to the application environment.
+
+2. Susceptibility to Brute-Force Attacks
+	•	Since there are no built-in protections against repeated failed login attempts, attackers can use automated scripts to guess passwords.
+	•	Weak passwords significantly increase the risk of a successful breach.
+
+3. Unencrypted Data Transmission (FTP Risk)
+	•	FTP transmits credentials and data in plaintext, making it vulnerable to Man-in-the-Middle (MITM) attacks.
+	•	Attackers on the same network can intercept login credentials and sensitive files.
+
+4. Risk of Unauthorized Code Deployment (SCM Risk)
+	•	If SCM authentication is compromised, attackers can deploy malicious code, modify existing applications, or even delete critical files.
+	•	This can lead to service downtime, data corruption, or security breaches.
+
+5. Compliance and Regulatory Issues
+	•	Many security standards (ISO 27001, CIS Benchmarks, NIST, GDPR, HIPAA) recommend disabling basic authentication due to its security weaknesses.
+	•	Organizations using basic authentication may fail security audits, leading to compliance violations and potential fines.
+
+6. No Multi-Factor Authentication (MFA) Support
+	•	Basic authentication does not support MFA, making it easier for attackers to access accounts with stolen credentials.
+	•	Modern security best practices mandate the use of MFA to prevent unauthorized access.
+
+Recommendations to Mitigate Risks
+
+✅ Disable Basic Authentication for both SCM and FTP in Azure App Service settings.
+✅ Use Secure Alternatives such as Azure AD authentication, OAuth, or SSH keys for secure access.
+✅ Enable Multi-Factor Authentication (MFA) to add an extra layer of security.
+✅ Restrict Access by IP Address to prevent unauthorized login attempts from unknown locations.
+✅ Use Secure File Transfer Methods like FTPS, SFTP, or Azure Blob Storage instead of FTP.
+✅ Monitor and Audit Access Logs to detect and respond to potential security incidents.
+
+🔹 Action Required: To ensure security and compliance, it is strongly recommended to disable basic authentication immediately and implement secure authentication mechanisms.
+
+
+
 Salesforce Financial Services Cloud（FSC）では、金融業界向けに特化したさまざまなオブジェクトと権限が提供されています。以下に、FSCで利用可能な主なオブジェクトと権限のリストをまとめます。
 
 主なオブジェクト:
