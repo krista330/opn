@@ -6,3 +6,9 @@
 3️⃣ Modifications to existing processes may be required to align with new deletion restrictions.
 
 Potential Adjustments to DevOps & Automation – If existing workflows involve frequent deletion and recreation of Key Vaults, they may need modifications, as the same Key Vault name cannot be reused until the soft-delete retention period ends.
+
+```
+fun() {
+dffdfd
+}
+```
