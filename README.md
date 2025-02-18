@@ -1,318 +1,38 @@
-リレーションシップマップコンポーネントを使ってますが、その下に配置してるコンポーネント群の目的はなんでしょうか？
-マップで表示できない内容があるのか、違いを明確にしたいです。
-Quipの単元とかでもいいですが、差を明確化して教えてください。
 ```
-AzureのDBとApp Service Planのメトリックス定点チェック手順書
-
-1. 初めに
-
-1.1 目的
-
-本手順書は、Azure上のデータベース（DB）とApp Service Planのメトリックスを定期的に監視し、適切なパフォーマンス管理を行うことを目的としています。具体的には、DTU、容量、リソースの使用状況などを確認し、異常値がないかをチェックすることで、サービスの安定運用をサポートします。
-
-1.2 実施頻度
-
-このチェックは毎月最後の週の木曜日午後に実施します。緊急時には随時実施し、必要に応じて対応を行います。
-
-1.3 監視対象
-
-データベース（DB）: DTU使用率、最大DTU値、使用容量
-
-App Service Plan: CPU使用率、メモリ使用率、ディスク使用率、ネットワークスループット
-
-2. 全体
-
-2.1 作業の流れ
-
-Azureポータルへログイン
-
-データベースのメトリックス確認
-
-App Service Planのメトリックス確認
-
-記録シートの更新
-
-グラフが正しく更新されているかを確認
-
-異常値があれば担当者へ報告
-
-2.2 注意事項
-
-テナントの切り替え: MOLITとMOLのテナントを間違えないように注意（各テナントのURLを明記）
-
-メトリックスの複数同時確認: 一度に複数のメトリックスを表示する方法を活用
-
-注意書きメッセージ: 確認時に表示された場合はスクリーンショットを取得し、対応手順を記録
-
-記録シートの更新: 取得データの期間（例：2024年2月10日10時〜2024年2月17日10時）を明記し、後で確認しやすくする
-
-グラフの更新確認: 記録シートにデータを入力した後、必ずグラフが最新データに更新されているか確認する。更新されていない場合は、データ範囲を見直し、手動更新を実施。
-
-3. 各リソースの詳細確認手順
-
-3.1 データベース（DB）のメトリックス確認
-
-DTUと容量の確認
-
-Azureポータルにログインし、対象のデータベースを開き、メトリックスを確認します。
-
-Azureポータルにログイン
-
-SQL Databaseのリソースを選択
-
-[メトリック] タブを開く
-
-DTU使用率（%） を確認
-
-Basic / Standard / Premium プランでの違いを明示
-
-使用率が80%以上の場合は担当者に報告
-
-最大DTUの確認（プランによって異なる）
-
-Basic: 5 DTU
-
-Standard: 10〜3000 DTU
-
-Premium: 125〜4000 DTU
-
-容量の確認（[概要] タブで確認）
-
-使用率が80%以上の場合はアラートを設定
-
-スクリーンショットを取得し、記録シートに添付
-
-3.2 App Service Planのメトリックス確認
-
-MOLITテナントとMOLテナントの切り替え
-
-MOLITテナントURL: https://portal.azure.com/MOLIT
-
-MOLテナントURL: https://portal.azure.com/MOL
-
-画面右上のアカウントアイコンからテナントを変更
-
-確認するメトリックス
-
-CPU使用率
-
-メモリ使用率
-
-ディスク使用率
-
-ネットワークのスループット
-
-複数のメトリックスを同時に確認する方法
-
-App Service Planのリソースを開く
-
-[メトリック] タブを開く
-
-[追加] ボタンをクリックし、表示したいメトリックスを選択
-
-表示形式をグラフまたはリストで調整
-
-スクリーンショットを取得し、記録シートに添付
-
-注意書きメッセージの対応
-
-確認中に注意書きが表示された場合、スクリーンショットを取得
-
-内容を確認し、必要に応じて対応手順を記録
-
-対応が必要な場合は担当者へ報告
-
-3.3 記録シートの更新
-
-取得データの期間を記録
-
-例：2024年2月10日10時 〜 2024年2月17日10時
-
-各メトリックスの値を記入
-
-スクリーンショットを添付
-
-グラフ更新の確認（記録したデータが適切に反映されているかチェック）
-
-グラフが最新データに更新されていない場合、データ範囲を見直し、手動更新を実施すること！
-
-4. まとめ
-
-本手順書に従い、定期的にAzureのDBおよびApp Service Planのメトリックスをチェックすることで、安定したシステム運用が可能となります。異常値を検知した場合は、速やかに対応を行い、適切な報告を行ってください。
-
-
-```
-
-
-「相続情報メール通知」処理失敗により、このレコードを保存できません。Salesforce システム管理者に次の詳細を報告してください。Probably Limit Exceeded or 0 recipients. Possible invalid email addresses: $Record.C_AccountId__r.Owner.Email エラー ID: 928899535-267720 (1731341359) invalid email addresses: $Record.C_AccountId__r.Owner.Email エラー ID: 928899535-267720 (1731341359)
-
-
-1️⃣ The change is irreversible – Purge Protection cannot be disabled once activated.
-2️⃣ Immediate permanent deletion is no longer possible, affecting test environments or automation scripts that rely on frequent key rotations.
-3️⃣ Modifications to existing processes may be required to align with new deletion restrictions.
-
-Potential Adjustments to DevOps & Automation – If existing workflows involve frequent deletion and recreation of Key Vaults, they may need modifications, as the same Key Vault name cannot be reused until the soft-delete retention period ends.
-
-```
-AzureのDBとApp Service Planのメトリックス定点チェック手順書
-
-1. 手順書の目的
-
-本手順書は、Azure上のデータベース（DB）とApp Service Planのメトリックスを定期的に監視し、適切なパフォーマンス管理を行うことを目的としています。具体的には、DTU、容量、リソースの使用状況などを確認し、異常値がないかをチェックすることで、サービスの安定運用をサポートします。
-
-2. 実施頻度
-
-このチェックは毎月最後の週の木曜日午後に実施します。緊急時には随時実施し、必要に応じて対応を行います。
-
-3. 作業全体の説明（新規シート）
-
-作業の全体像を把握しやすくするために、Excelに「作業概要」シートを追加します。このシートには、以下の情報を記載します。
-
-作業の目的（AzureのDBおよびApp Service Planのメトリックス監視）
-
-実施頻度（毎月最後の週の木曜日午後）
-
-作業の流れ概要
-
-各シートの役割説明（DBメトリックス、App Service Planメトリックス、記録シート、作業フローなど）
-
-注意事項および対応方針
-
-4. 作業フローシート
-
-作業の全体フローを示すシートをExcelに追加します。このシートでは、各手順の流れを視覚的に確認できるようにし、以下の要素を含めます。
-
-作業実施日（毎月最後の週の木曜日午後）
-
-作業の流れ（チェックする順番）
-
-関連シートへのリンク（DBメトリックス、App Service Planメトリックス、記録シートなど）
-
-確認すべきポイント
-
-対応が必要な場合のフロー
-
-5. 定点チェックの推奨手順
-
-データベース（DB）のメトリックス確認
-
-DTU使用率と最大DTU値の確認（プランによる違いを明示）
-
-使用容量と最大容量の確認
-
-App Service Planのメトリックス確認
-
-MOLITテナントとMOLテナントの切り替え（各テナントのURL明記）
-
-CPU、メモリ、ディスク使用率の確認
-
-複数の値の種類を同時に確認する方法
-
-注意書きメッセージのスクリーンショット取得および対応手順の記録
-
-記録シートの更新
-
-取得したデータの期間を明記（例：2024年2月10日10時〜2024年2月17日10時）
-
-別シートにあるグラフが適切に更新されているかの確認
-
-6. データベース（DB）のメトリックス確認手順
-
-6.1 DTUと容量の確認
-
-Azureポータルにログインし、対象のデータベースを開き、メトリックスを確認します。
-
-DTUの確認手順
-
-Azureポータルにログイン
-
-SQL Databaseのリソースを選択
-
-[メトリック] タブを開く
-
-DTU使用率（%） を確認
-
-Basic / Standard / Premium プランでの違いを明示
-
-使用率が80%以上の場合は担当者に報告
-
-最大DTUの確認（プランによって異なる）
-
-Basic: 5 DTU
-
-Standard: 10〜3000 DTU
-
-Premium: 125〜4000 DTU
-
-スクリーンショットを取得し、記録シートに添付
-
-容量の確認手順
-
-SQL Databaseのリソースを開く
-
-[概要] タブで現在の使用容量を確認
-
-最大容量との比較
-
-使用率が80%以上の場合はアラートを設定
-
-スクリーンショットを取得し、記録シートに添付
-
-7. App Service Planのメトリックス確認手順
-
-7.1 MOLITテナントとMOLテナントの切り替え
-
-MOLITテナントURL: https://portal.azure.com/MOLIT
-
-MOLテナントURL: https://portal.azure.com/MOL
-
-画面右上のアカウントアイコンからテナントを変更
-
-7.2 確認するメトリックス
-
-CPU使用率
-
-メモリ使用率
-
-ディスク使用率
-
-ネットワークのスループット
-
-7.3 複数のメトリックスを同時に確認する方法
-
-App Service Planのリソースを開く
-
-[メトリック] タブを開く
-
-[追加] ボタンをクリックし、表示したいメトリックスを選択
-
-表示形式をグラフまたはリストで調整
-
-スクリーンショットを取得し、記録シートに添付
-
-7.4 注意書きメッセージの対応
-
-確認中に注意書きが表示された場合、スクリーンショットを取得
-
-内容を確認し、必要に応じて対応手順を記録
-
-対応が必要な場合は担当者へ報告
-
-8. 記録シートの更新手順
-
-取得データの期間を記録
-
-例：2024年2月10日10時 〜 2024年2月17日10時
-
-各メトリックスの値を記入
-
-スクリーンショットを添付
-
-別シートのグラフ更新を確認
-
-更新されていない場合、データ範囲を見直し
-
-9. まとめ
-
-本手順書に従い、定期的にAzureのDBおよびApp Service Planのメトリックスをチェックすることで、安定したシステム運用が可能となります。異常値を検知した場合は、速やかに対応を行い、適切な報告を行ってください。
+@echo off
+rem Salesforceのメタデータバックアップを取得します。
+
+set curdir=%~dp0
+cd /d %curdir%
+
+rem 環境変数
+
+rem メタデータの出力先
+set backup.dir=.\05.daiichigolf
+
+rem メタデータの指定。取得するメタデータや除外するメタデータを指定します。
+rem 指定がない場合全てのメタデータが対象となります。両方同時に指定できません。
+rem メタデータはカンマ区切りで複数指定可能です。メタデータは次のような指定となります。
+rem AuraDefinitionBundle, AnalyticSnapshot, ApexClass, ApexComponent, ApexPage, ApexTrigger, ApprovalProcess, AssignmentRules, AuthProvider, AutoResponseRules, CallCenter, Community, ConnectedApp, CustomApplication, CustomLabels, CustomObject, CustomObjectTranslation, CustomPageWebLink, CustomSite, CustomTab, Dashboard, DataCategoryGroup, Document, EmailTemplate, EscalationRules, FlexiPage, Flow, Group, HomePageComponent, HomePageLayout, InstalledPackage, Layout, Letterhead, PermissionSet, PostTemplate, Profile, Queue, QuickAction, RemoteSiteSetting, Report, ReportType, Role, Scontrol, Settings, StaticResource, Workflow
+set metadata.include=
+set metadata.exclude=
+
+rem salesforce ログイン情報 / https://login.salesforce.com/services/Soap/u/51.0 or https://test.salesforce.com/services/Soap/u/51.0
+set sfdc.url=https://test.salesforce.com/services/Soap/u/51.0
+set sfdc.username=endo.h.tsukada@nddhq.co.jp.daichigolf
+set sfdc.password=4r393Q6JzMTknsY
+
+rem プロキシ情報（プロキシを指定しない場合は、空をセット）
+set http.proxyHost=
+set http.proxyPort=
+set http.proxyUser=
+set http.proxyPassword=
+set http.auth.ntlm.domain=
+
+rem java.exeにパスが通っている前提、適宜javaコマンドへのフルパスに変更してください。(jre8がインストールされていればパスは通ってます)
+set JAVACMD=java
+%JAVACMD% -Djdk.http.auth.tunneling.disabledSchemes=  -Xms32m -Xmx1024m -cp "%curdir%\bin\*" ExportMetadata
+
+pause
+rem exit %ERRORLEVEL%
 ```
