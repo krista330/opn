@@ -1,3 +1,21 @@
+Azure Firewall offers enterprise-grade security for Azure Virtual Networks but comes with certain trade-offs in terms of performance, cost, and network complexity.
+
+Key Advantages
+✅ Enhanced Security – Provides advanced traffic filtering, application-layer protection, and threat intelligence to safeguard your infrastructure.
+
+Potential Challenges
+🔻 Performance Impact – Introduces latency and potential throughput limitations due to traffic inspection.
+🔻 Increased Costs – Charged on an hourly basis plus data processing fees, which can significantly add to operational expenses.
+🔻 Network Complexity – Requires additional configuration, such as User Defined Routes (UDRs) and forced tunneling, increasing deployment effort.
+
+Optimization Strategies
+For basic security needs, consider using Network Security Groups (NSGs) as a cost-effective alternative.
+For budget-conscious deployments, Azure Firewall Basic SKU offers a lower-cost option with fundamental protections.
+For advanced security with flexibility, third-party firewalls (e.g., Palo Alto, Fortinet) may provide alternative solutions with optimized pricing.
+Final Consideration
+Azure Firewall is a valuable investment for businesses requiring robust security controls. However, organizations should carefully evaluate cost-performance trade-offs and explore alternative security solutions if advanced protection is not a critical requirement.
+  
+  
 Using Azure Firewall in an Azure Virtual Network impacts the system in the following ways:
 
 1. Security Enhancement
