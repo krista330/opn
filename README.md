@@ -1,4 +1,16 @@
 ```
+sfdx force:lightning:component:create --type lwc --componentname myComponent --outputdir force-app/main/default/lwc
+```
+
+```
+```
+
+```
+```
+
+
+
+```
 public class StoreBatchJob implements Database.Batchable<sObject>, Database.Stateful {
     private String processType;
 
