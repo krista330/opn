@@ -1,38 +1,120 @@
 ```
-@echo off
-rem Salesforceのメタデータバックアップを取得します。
+public class StoreBatchJob implements Database.Batchable<sObject>, Database.Stateful {
+    private String processType;
 
-set curdir=%~dp0
-cd /d %curdir%
+    public StoreBatchJob(String processType) {
+        this.processType = processType;
+    }
 
-rem 環境変数
+    public Database.QueryLocator start(Database.BatchableContext BC) {
+        if (processType == 'all') {
+            return Database.getQueryLocator('SELECT Id, Name FROM Store__c'); // 所有店铺
+        } else {
+            return Database.getQueryLocator([
+                SELECT Id, Name FROM Store__c WHERE OwnerId = :UserInfo.getUserId()
+            ]); // 自己所属的店铺
+        }
+    }
 
-rem メタデータの出力先
-set backup.dir=.\05.daiichigolf
+    public void execute(Database.BatchableContext BC, List<Store__c> storeList) {
+        for (Store__c store : storeList) {
+            // 空的处理逻辑，可以在这里添加业务处理
+            System.debug('Processing store: ' + store.Name);
+        }
+    }
 
-rem メタデータの指定。取得するメタデータや除外するメタデータを指定します。
-rem 指定がない場合全てのメタデータが対象となります。両方同時に指定できません。
-rem メタデータはカンマ区切りで複数指定可能です。メタデータは次のような指定となります。
-rem AuraDefinitionBundle, AnalyticSnapshot, ApexClass, ApexComponent, ApexPage, ApexTrigger, ApprovalProcess, AssignmentRules, AuthProvider, AutoResponseRules, CallCenter, Community, ConnectedApp, CustomApplication, CustomLabels, CustomObject, CustomObjectTranslation, CustomPageWebLink, CustomSite, CustomTab, Dashboard, DataCategoryGroup, Document, EmailTemplate, EscalationRules, FlexiPage, Flow, Group, HomePageComponent, HomePageLayout, InstalledPackage, Layout, Letterhead, PermissionSet, PostTemplate, Profile, Queue, QuickAction, RemoteSiteSetting, Report, ReportType, Role, Scontrol, Settings, StaticResource, Workflow
-set metadata.include=
-set metadata.exclude=
+    public void finish(Database.BatchableContext BC) {
+        System.debug('Batch job completed');
+    }
+}
 
-rem salesforce ログイン情報 / https://login.salesforce.com/services/Soap/u/51.0 or https://test.salesforce.com/services/Soap/u/51.0
-set sfdc.url=https://test.salesforce.com/services/Soap/u/51.0
-set sfdc.username=endo.h.tsukada@nddhq.co.jp.daichigolf
-set sfdc.password=4r393Q6JzMTknsY
-
-rem プロキシ情報（プロキシを指定しない場合は、空をセット）
-set http.proxyHost=
-set http.proxyPort=
-set http.proxyUser=
-set http.proxyPassword=
-set http.auth.ntlm.domain=
-
-rem java.exeにパスが通っている前提、適宜javaコマンドへのフルパスに変更してください。(jre8がインストールされていればパスは通ってます)
-set JAVACMD=java
-%JAVACMD% -Djdk.http.auth.tunneling.disabledSchemes=  -Xms32m -Xmx1024m -cp "%curdir%\bin\*" ExportMetadata
-
-pause
-rem exit %ERRORLEVEL%
 ```
+
+
+```
+public with sharing class StoreBatchController {
+    @AuraEnabled
+    public static String startBatchJob(String processType) {
+        try {
+            StoreBatchJob batch = new StoreBatchJob(processType);
+            Database.executeBatch(batch);
+            return 'Batch Job Started Successfully';
+        } catch (Exception e) {
+            return 'Error: ' + e.getMessage();
+        }
+    }
+}
+
+```
+
+```
+import { LightningElement, track } from 'lwc';
+import startBatchJob from '@apex/StoreBatchController.startBatchJob';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+export default class StoreBatchProcessor extends LightningElement {
+    @track selectedOption = 'all'; // 默认选择 "所有店铺信息处理"
+    @track processingMessage = ''; // 处理状态
+
+    get options() {
+        return [
+            { label: '所有店铺信息处理', value: 'all' },
+            { label: '自己所属的店铺信息处理', value: 'own' }
+        ];
+    }
+
+    handleChange(event) {
+        this.selectedOption = event.detail.value;
+    }
+
+    async handleNextPage() {
+        this.processingMessage = '业务处理开始...'; // 业务处理开始
+        try {
+            const result = await startBatchJob({ processType: this.selectedOption });
+
+            this.processingMessage = '处理中...'; // 处理中
+
+            setTimeout(() => {
+                this.processingMessage = '处理结束'; // 处理完成
+                this.showToast('成功', result, 'success');
+            }, 3000);
+        } catch (error) {
+            this.processingMessage = '处理失败';
+            this.showToast('错误', error.body.message, 'error');
+        }
+    }
+
+    showToast(title, message, variant) {
+        this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
+    }
+}
+```
+
+```
+<template>
+    <lightning-card title="店铺信息批量处理">
+        <div class="slds-p-around_medium">
+            <!-- 选择处理方式 -->
+            <lightning-radio-group name="storeProcessType"
+                label="请选择处理方式"
+                options={options}
+                value={selectedOption}
+                onchange={handleChange}
+                type="radio">
+            </lightning-radio-group>
+
+            <!-- 下一页按钮 -->
+            <div class="slds-m-top_medium">
+                <lightning-button label="下一页" variant="brand" onclick={handleNextPage}></lightning-button>
+            </div>
+
+            <!-- 处理状态信息 -->
+            <div class="slds-m-top_medium">
+                <lightning-formatted-text value={processingMessage}></lightning-formatted-text>
+            </div>
+        </div>
+    </lightning-card>
+</template>
+
+```
+
