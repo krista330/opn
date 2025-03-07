@@ -1,3 +1,9 @@
+````
+YEAR(TODAY()) - YEAR(Birthdate) - 
+IF( DATE(YEAR(TODAY()), MONTH(Birthdate), DAY(Birthdate)) > TODAY(), 1, 0)
+
+````
+
 ```
 sfdx force:lightning:component:create --type lwc --componentname myComponent --outputdir force-app/main/default/lwc
 ```
