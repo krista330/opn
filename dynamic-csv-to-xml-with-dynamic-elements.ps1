@@ -36,13 +36,6 @@ if (Test-Path $csvPath) {
         # 各ヘッダーに対応する子要素を動的に作成
         foreach ($header in $headers) {
             $value = $row.$header
-            
-            # required と trackFeedHistory の場合は真偽値に変換してLowerCaseに
-            if ($header -eq "required" -or $header -eq "trackFeedHistory") {
-                $boolValue = if ($value -eq "true") { $true } else { $false }
-                $value = $boolValue.ToString().ToLower()
-            }
-            
             # 子要素を作成（namespace無し）
             $writer.WriteElementString($header, $value)
         }
