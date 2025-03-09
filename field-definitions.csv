@@ -1,0 +1,4 @@
+fullName,label,required,trackFeedHistory,type
+C_TEST_auto01__c,[テスト自動01] 日付項目,false,false,Date
+C_TEST_auto02__c,[テスト自動02] 数値項目,false,false,Number
+C_TEST_auto03__c,[テスト自動03] フラグ項目,false,false,Checkbox
