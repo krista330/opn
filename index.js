@@ -1,3 +1,8 @@
+If your network security requirements primarily involve IP and port-level access control, NSG is sufficient.
+If you require advanced threat detection (malicious traffic blocking) and application-layer filtering (website access control), Azure Firewall is the better choice.
+
+
+
 Why Azure Virtual Network with NSG Makes Azure Firewall Unnecessary
 In an Azure Virtual Network, Network Security Groups (NSG) can be used to control inbound and outbound traffic at both the subnet and network interface levels. This often makes Azure Firewall unnecessary for the following reasons:
 
