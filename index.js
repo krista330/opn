@@ -1,3 +1,35 @@
+
+```
+// 既存の FeedItem の ID（変更したいもの）
+Id oldFeedItemId = '0D5XXXXXXXXXXXXXXX';
+
+// 新しい ParentId（変更先のレコード ID）
+Id newParentId = '005XXXXXXXXXXXXXXX'; // ユーザー, グループ, レコード ID など
+
+// 1. 既存の FeedItem を取得
+FeedItem oldFeed = [SELECT Body, LinkUrl, Title, Visibility FROM FeedItem WHERE Id = :oldFeedItemId];
+
+// 2. 新しい FeedItem を作成
+FeedItem newFeed = new FeedItem();
+newFeed.ParentId = newParentId;
+newFeed.Body = oldFeed.Body;
+newFeed.LinkUrl = oldFeed.LinkUrl; // LinkPost の URL
+newFeed.Title = oldFeed.Title;
+newFeed.Type = 'LinkPost';
+newFeed.Visibility = oldFeed.Visibility; // Chatter の可視性設定
+
+insert newFeed;
+
+// 3. 古い FeedItem を削除（不要なら省略）
+delete oldFeed;
+
+System.debug('新しい FeedItem が作成されました: ' + newFeed.Id);
+
+````
+
+
+
+
 public void moveFeedItemWithFiles(Id oldFeedItemId, Id newParentId) {
     // 1. 元の投稿（FeedItem）を取得
     FeedItem oldFeed = [SELECT Id, Body, Title FROM FeedItem WHERE Id = :oldFeedItemId];
