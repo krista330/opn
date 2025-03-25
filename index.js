@@ -1,77 +1,34 @@
-当行取引地位（Bank Transaction Status）
-（取引状況を表す選択肢）
+public void moveFeedItemWithFiles(Id oldFeedItemId, Id newParentId) {
+    // 1. 元の投稿（FeedItem）を取得
+    FeedItem oldFeed = [SELECT Id, Body, Title FROM FeedItem WHERE Id = :oldFeedItemId];
 
-主要取引先
-準主要取引先
-一般取引先
-取引なし
-取引検討中
-② 従業員数（Number of Employees）
-（範囲で分類）
+    // 2. 新しい投稿を作成（ParentIdを変更）
+    FeedItem newFeed = new FeedItem();
+    newFeed.ParentId = newParentId;
+    newFeed.Body = oldFeed.Body;
+    newFeed.Title = oldFeed.Title;
+    newFeed.Type = 'ContentPost'; // ファイル投稿
+    insert newFeed;
+    
+    // 3. 旧投稿に添付されたファイルを取得
+    List<ContentDocumentLink> oldLinks = [
+        SELECT ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId = :oldFeedItemId
+    ];
 
-1～10人
-11～50人
-51～100人
-101～500人
-501～1000人
-1001～5000人
-5001人以上
-③ 業種（Industry）
-（主要業種分類）
+    // 4. 新しい投稿にファイルを紐づける
+    List<ContentDocumentLink> newLinks = new List<ContentDocumentLink>();
+    for (ContentDocumentLink link : oldLinks) {
+        ContentDocumentLink newLink = new ContentDocumentLink();
+        newLink.LinkedEntityId = newFeed.Id; // 新しい投稿に紐づける
+        newLink.ContentDocumentId = link.ContentDocumentId;
+        newLink.ShareType = 'V'; // Viewerとして設定
+        newLinks.add(newLink);
+    }
+    insert newLinks;
 
-製造業
-卸売業
-小売業
-IT・通信
-金融・保険
-不動産
-建設業
-運輸・物流
-飲食業
-医療・福祉
-教育・研究
-公共・行政
-その他
-④ 業種（詳細）（Sub-Industry）
-（業種ごとの詳細分類）
-例：製造業の場合
-
-自動車製造
-電子部品製造
-化学製品製造
-食品製造
-鉄鋼・金属製造
-繊維・衣料品製造
-例：IT・通信の場合
-
-ソフトウェア開発
-システムインテグレーター
-クラウドサービス
-通信キャリア
-Webサービス
-※ **業種（詳細）**は、業種（Industry）の選択に応じて動的に表示する「依存関係付き選択リスト（Dependent Picklist）」に設定すると便利。
-
-⑤ 格付（直近）（Latest Credit Rating）
-（金融機関の格付け基準に準拠）
-
-AAA
-AA+
-AA
-AA-
-A+
-A
-A-
-BBB+
-BBB
-BBB-
-BB+
-BB
-BB-
-B+
-B
-B-
-CCC+ 以下
-未評価
+    // 5. 元の投稿を削除（オプション）
+    delete oldFeed;
+}
 
 
 NOT(
