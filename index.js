@@ -1,3 +1,5 @@
+v905sKux3OD9dYgTqyZEThkN
+
 ```
 az keyvault show --name <KeyVault名> --resource-group <リソースグループ名> --query properties.softDeleteRetentionInDays
 ```
