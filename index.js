@@ -4,6 +4,35 @@ v905sKux3OD9dYgTqyZEThkN
 az keyvault show --name <KeyVault名> --resource-group <リソースグループ名> --query properties.softDeleteRetentionInDays
 ```
 
+    function afterClose() {
+    if (dto.fClose) {
+        var openStandardPage = "[{!$Resource.SR_HTML_OpenStandardPage}" + 
+            "?openURL=" + encodeURIComponent("/{!dto.mitsumori.Id}");
+
+        window.open(openStandardPage, '', 'width=0px, height=0px');
+
+        // 确保母页面存在并且没有关闭
+        if (window.opener && !window.opener.closed) {
+            try {
+                // 如果是 Lightning 页面，使用 Lightning API 刷新
+                if (window.opener.$A) {
+                    window.opener.$A.get('e.force:refreshView').fire();
+                } else {
+                    // Classic 页面使用 location.reload()
+                    window.opener.location.reload();
+                }
+            } catch (e) {
+                console.error("无法刷新母页面", e);
+            }
+        }
+
+        // 关闭当前窗口
+        setTimeout(function() {
+            window.close();
+        }, 500);
+    }
+}
+
 ```
 function afterClose() {
     if (dto.fClose) {
