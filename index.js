@@ -5,30 +5,22 @@ az keyvault show --name <KeyVault名> --resource-group <リソースグループ
 ```
 
 ```
-// 既存の FeedItem の ID（変更したいもの）
-Id oldFeedItemId = '0D5XXXXXXXXXXXXXXX';
+function afterClose() {
+    if (dto.fClose) {
+        var openStandardPage = "[{!$Resource.SR_HTML_OpenStandardPage}" + 
+            "?openURL=" + encodeURIComponent("/{!dto.mitsumori.Id}");
 
-// 新しい ParentId（変更先のレコード ID）
-Id newParentId = '005XXXXXXXXXXXXXXX'; // ユーザー, グループ, レコード ID など
+        window.open(openStandardPage, '', 'width=0px, height=0px');
+        
+        // 刷新母页面
+        if (window.opener && !window.opener.closed) {
+            window.opener.location.reload();
+        }
 
-// 1. 既存の FeedItem を取得
-FeedItem oldFeed = [SELECT Body, LinkUrl, Title, Visibility FROM FeedItem WHERE Id = :oldFeedItemId];
-
-// 2. 新しい FeedItem を作成
-FeedItem newFeed = new FeedItem();
-newFeed.ParentId = newParentId;
-newFeed.Body = oldFeed.Body;
-newFeed.LinkUrl = oldFeed.LinkUrl; // LinkPost の URL
-newFeed.Title = oldFeed.Title;
-newFeed.Type = 'LinkPost';
-newFeed.Visibility = oldFeed.Visibility; // Chatter の可視性設定
-
-insert newFeed;
-
-// 3. 古い FeedItem を削除（不要なら省略）
-delete oldFeed;
-
-System.debug('新しい FeedItem が作成されました: ' + newFeed.Id);
+        // 关闭当前窗口
+        window.close();
+    }
+}
 
 ````
 
