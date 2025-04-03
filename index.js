@@ -1,4 +1,56 @@
-v905sKux3OD9dYgTqyZEThkN
+<apex:page controller="TableController">
+    <apex:form>
+        <apex:pageBlock title="データ一覧">
+            <!-- スクロール可能なテーブルのラッパー -->
+            <apex:outputPanel layout="block" style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc; display: block;">
+                <apex:pageBlockTable value="{!contacts}" var="con" styleClass="scrollableTable">
+                    <apex:column headerValue="Id">
+                        <apex:outputText value="{!con.Id}" />
+                    </apex:column>
+                    <apex:column>
+                        <apex:facet name="header">
+                            <span class="stickyHeader">名前</span>
+                        </apex:facet>
+                        <apex:outputText value="{!con.Name}" />
+                    </apex:column>
+                    <apex:column>
+                        <apex:facet name="header">
+                            <span class="stickyHeader">メール</span>
+                        </apex:facet>
+                        <apex:outputText value="{!con.Email}" />
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:outputPanel>
+        </apex:pageBlock>
+    </apex:form>
+
+    <!-- ヘッダー固定用の CSS -->
+    <style>
+        .scrollableTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* Stickyヘッダーの設定 */
+        .stickyHeader {
+            position: sticky;
+            top: 0;
+            background: #f8f8f8;
+            z-index: 2;
+            display: block;
+            padding: 8px;
+            font-weight: bold;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .scrollableTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</apex:page>
+
 
 ```
 az keyvault show --name <KeyVault名> --resource-group <リソースグループ名> --query properties.softDeleteRetentionInDays
