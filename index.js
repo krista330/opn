@@ -1,3 +1,194 @@
+
+大変失礼いたしました。
+まだ業務に慣れておらず、お客様が実際にどう検索されるかは正直まだよく分かっていません。
+そのため、こちらで候補になりそうな条件をいくつか挙げて、お客様に選んでいただく形で進めようと思っています。
+もし私から提案する形で進めるのであれば、以下の項目での検索を想定しております：
+
+1page
+画面遷移なし、操作がシンプルで分かりやすい
+小〜中規模データ向き
+画面構成が複雑になる恐れあり（UI設計に工夫が必要）
+2pages
+処理の分離により保守性・拡張性が高い
+検索・選択機能をリッチに設計可能
+画面遷移あり、ユーザーにとってやや手間になる可能性
+
+利点：
+ページ遷移なし：画面遷移なしでデータ操作ができ、スムーズな体験が提供されます。
+シンプルな画面維持：主画面はシンプルなままで、必要な操作をモーダルで行えます。
+統一されたUI：同じページ内で操作が完結し、ユーザーに一貫した体験を提供します。
+
+欠点：
+状態同期が複雑：モーダル内の操作後、主画面のデータ更新や同期が難しい場合があります。
+管理が煩雑：モーダルの開閉やデータ管理に追加のロジックが必要です。
+モバイル対応の問題：モバイル端末では表示や操作が最適化されていない可能性があります。
+
+```
+<apex:page controller="QuoteCopyController" sidebar="false" showHeader="true">
+    <apex:form id="mainForm">
+
+        <!-- ✅ Toast メッセージ -->
+        <div id="toast" style="display:none; position:fixed; top:10px; right:20px; background:#0070d2; color:white; padding:10px 20px; border-radius:5px; z-index:10000;">
+            コピー成功！
+        </div>
+
+        <!-- ✅ 現在の見積明細リスト（編集可能） -->
+        <h2>現在の見積明細</h2>
+        <apex:outputPanel id="quoteDetailsBlock">
+            <apex:pageBlock title="見積明細一覧">
+                <apex:pageBlockTable value="{!currentQuoteDetails}" var="qd">
+                    <apex:column value="{!qd.Name}" headerValue="項目名" />
+                    <apex:column headerValue="説明">
+                        <apex:inputText value="{!qd.Description__c}" />
+                    </apex:column>
+                    <apex:column headerValue="数量">
+                        <apex:inputText value="{!qd.Quantity__c}" />
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+
+        <!-- ✅ モーダルを開くボタン -->
+        <apex:commandButton value="他の見積から明細をコピー" onclick="openModal(); return false;" styleClass="btn" />
+
+        <!-- ✅ モーダル ウィンドウ -->
+        <div id="copyModal" style="display:none; position:fixed; top:10%; left:10%; width:80%; height:75%; background:#fff; border:1px solid #ccc; box-shadow:0 0 15px #aaa; padding:20px; z-index:9999; overflow:auto;">
+            <h3>他の見積から明細をコピー</h3>
+
+            <label>見積番号:</label>
+            <apex:inputText value="{!searchQuoteNumber}" />
+            <apex:commandButton value="検索" action="{!searchQuoteDetails}" rerender="searchResults" styleClass="btn" />
+
+            <apex:outputPanel id="searchResults">
+                <apex:pageBlock title="検索結果">
+                    <apex:pageBlockTable value="{!searchResults}" var="result">
+                        <apex:column headerValue="選択">
+                            <apex:inputCheckbox value="{!result.selected}" />
+                        </apex:column>
+                        <apex:column value="{!result.detail.Name}" headerValue="項目名" />
+                        <apex:column value="{!result.detail.Description__c}" headerValue="説明" />
+                        <apex:column value="{!result.detail.Quantity__c}" headerValue="数量" />
+                    </apex:pageBlockTable>
+                </apex:pageBlock>
+            </apex:outputPanel>
+
+            <br/>
+            <apex:commandButton value="コピーする"
+                                action="{!copySelectedDetails}"
+                                rerender="quoteDetailsBlock"
+                                oncomplete="afterCopyDone();" styleClass="btn" />
+            <input type="button" value="閉じる" onclick="closeModal();" class="btn" />
+        </div>
+
+    </apex:form>
+
+    <!-- ✅ JS: モーダル制御 + トースト -->
+    <script>
+        function openModal() {
+            document.getElementById('copyModal').style.display = 'block';
+        }
+        function closeModal() {
+            document.getElementById('copyModal').style.display = 'none';
+        }
+        function afterCopyDone() {
+            closeModal();
+            showToast('選択した見積明細がコピーされました。');
+        }
+        function showToast(msg) {
+            let toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+    </script>
+
+    <!-- ✅ シンプルなスタイル -->
+    <style>
+        .btn {
+            background-color: #0070d2;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #005fb2;
+        }
+    </style>
+</apex:page>
+
+```
+
+
+```
+public class QuoteCopyController {
+
+    public List<QuoteDetail__c> currentQuoteDetails { get; set; }
+    public String searchQuoteNumber { get; set; }
+    public List<WrapperQuoteDetail> searchResults { get; set; }
+
+    public QuoteCopyController() {
+        // 現在の見積IDを取得
+        Id quoteId = ApexPages.currentPage().getParameters().get('quoteId');
+        currentQuoteDetails = [
+            SELECT Name, Description__c, Quantity__c
+            FROM QuoteDetail__c
+            WHERE Quote__c = :quoteId
+        ];
+    }
+
+    public void searchQuoteDetails() {
+        List<QuoteDetail__c> found = [
+            SELECT Name, Description__c, Quantity__c, Quote__r.Name
+            FROM QuoteDetail__c
+            WHERE Quote__r.Name LIKE :('%' + searchQuoteNumber + '%')
+            LIMIT 50
+        ];
+
+        searchResults = new List<WrapperQuoteDetail>();
+        for (QuoteDetail__c qd : found) {
+            searchResults.add(new WrapperQuoteDetail(qd));
+        }
+    }
+
+    public void copySelectedDetails() {
+        Id quoteId = ApexPages.currentPage().getParameters().get('quoteId');
+        List<QuoteDetail__c> toInsert = new List<QuoteDetail__c>();
+
+        for (WrapperQuoteDetail wrap : searchResults) {
+            if (wrap.selected) {
+                QuoteDetail__c copy = wrap.detail.clone(false, false, false, false);
+                copy.Quote__c = quoteId;
+                toInsert.add(copy);
+            }
+        }
+
+        if (!toInsert.isEmpty()) {
+            insert toInsert;
+        }
+
+        // コピー後、現在の見積明細を再取得して更新
+        currentQuoteDetails = [
+            SELECT Name, Description__c, Quantity__c
+            FROM QuoteDetail__c
+            WHERE Quote__c = :quoteId
+        ];
+    }
+
+    public class WrapperQuoteDetail {
+        public QuoteDetail__c detail { get; set; }
+        public Boolean selected { get; set; }
+
+        public WrapperQuoteDetail(QuoteDetail__c d) {
+            this.detail = d;
+            this.selected = false;
+        }
+    }
+}
+```
+
 <apex:page controller="TableController">
     <apex:form>
         <apex:pageBlock title="データ一覧">
