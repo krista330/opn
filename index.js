@@ -1,8 +1,21 @@
+    public void searchQuoteDetails() {
+        String query = 'SELECT Name, Description__c, Quantity__c, Quote__r.Name FROM QuoteDetail__c WHERE Quote__r.Name LIKE :\'%' + searchAccountName + '%\' AND Opportunity__r.Name LIKE :\'%' + searchOpportunityName + '%\' AND OwnerId = :searchOwnerId';
 
-大変失礼いたしました。
-まだ業務に慣れておらず、お客様が実際にどう検索されるかは正直まだよく分かっていません。
-そのため、こちらで候補になりそうな条件をいくつか挙げて、お客様に選んでいただく形で進めようと思っています。
-もし私から提案する形で進めるのであれば、以下の項目での検索を想定しております：
+        List<QuoteDetail__c> found = Database.query(query);
+
+        // 検索結果が50件を超えた場合
+        if (found.size() > 50) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, '検索結果が50件を超えています。絞り込み条件を変更してください。'));
+            searchResults = new List<WrapperQuoteDetail>();
+            return;
+        }
+
+        searchResults = new List<WrapperQuoteDetail>();
+        for (QuoteDetail__c qd : found) {
+            searchResults.add(new WrapperQuoteDetail(qd));
+        }
+    }
+
 
 1page
 画面遷移なし、操作がシンプルで分かりやすい
