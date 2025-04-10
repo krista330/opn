@@ -1,4 +1,46 @@
-    public void searchQuoteDetails() {
+2. VAPT Remediation (Azure Infrastructure)
+
+2.1 Disable Basic Authentication
+	•	We’ve completed this for DXDTA and MOL-IT review.
+	•	Basic Authentication has been disabled for WebApp, FunctionApp, and LogicApp.
+	•	However, in the PoC environment, Basic Authentication was re-enabled due to a DevOps release.
+	•	We’ve reverted it back to disabled.
+	•	Current status:
+	•	Dev/UAT/SG/Pre-PRD: Done
+	•	PRD: Done as of April 7th
+
+2.2 Key Vaults – Purge Protection
+	•	Review is completed, and we’ve decided to enable purge protection.
+	•	UAT was done on March 31st.
+	•	Pre-PRD and PRD were completed on April 7th.
+	•	No issues reported this week, so we plan to close this task.
+
+2.3 Enable HTTP2 (if applicable)
+	•	This is currently under verification at the MOL-IT side.
+	•	No issues so far.
+
+2.4 Azure Firewall for VNet
+	•	Initial investigation is done by DXDTA and reviewed by MOL-IT.
+	•	We will not implement Azure Firewall due to cost concerns.
+	•	Instead, we’ll proceed with NSG rule review and remediation.
+
+2.5 WAF Rules (1-8, 1-19)
+	•	Initial investigation is done by DXDTA.
+	•	MOL-IT review is still in progress.
+
+2.6 Defender for Cloud – Log Export Setting
+	•	Investigation is completed on DXDTA side.
+	•	MOL-IT review is still ongoing.
+
+⸻
+
+Let me know if you’d like to adapt this for a slide or document format as well.
+    
+
+
+
+
+public void searchQuoteDetails() {
         String query = 'SELECT Name, Description__c, Quantity__c, Quote__r.Name FROM QuoteDetail__c WHERE Quote__r.Name LIKE :\'%' + searchAccountName + '%\' AND Opportunity__r.Name LIKE :\'%' + searchOpportunityName + '%\' AND OwnerId = :searchOwnerId';
 
         List<QuoteDetail__c> found = Database.query(query);
