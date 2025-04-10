@@ -1,143 +1,73 @@
-2. VAPT Remediation (Azure Infrastructure)
-
-2.1 Disable Basic Authentication
-	•	We’ve completed this for DXDTA and MOL-IT review.
-	•	Basic Authentication has been disabled for WebApp, FunctionApp, and LogicApp.
-	•	However, in the PoC environment, Basic Authentication was re-enabled due to a DevOps release.
-	•	We’ve reverted it back to disabled.
-	•	Current status:
-	•	Dev/UAT/SG/Pre-PRD: Done
-	•	PRD: Done as of April 7th
-
-2.2 Key Vaults – Purge Protection
-	•	Review is completed, and we’ve decided to enable purge protection.
-	•	UAT was done on March 31st.
-	•	Pre-PRD and PRD were completed on April 7th.
-	•	No issues reported this week, so we plan to close this task.
-
-2.3 Enable HTTP2 (if applicable)
-	•	This is currently under verification at the MOL-IT side.
-	•	No issues so far.
-
-2.4 Azure Firewall for VNet
-	•	Initial investigation is done by DXDTA and reviewed by MOL-IT.
-	•	We will not implement Azure Firewall due to cost concerns.
-	•	Instead, we’ll proceed with NSG rule review and remediation.
-
-2.5 WAF Rules (1-8, 1-19)
-	•	Initial investigation is done by DXDTA.
-	•	MOL-IT review is still in progress.
-
-2.6 Defender for Cloud – Log Export Setting
-	•	Investigation is completed on DXDTA side.
-	•	MOL-IT review is still ongoing.
-
-⸻
-
-Let me know if you’d like to adapt this for a slide or document format as well.
-    
-
-
-
-
-public void searchQuoteDetails() {
-        String query = 'SELECT Name, Description__c, Quantity__c, Quote__r.Name FROM QuoteDetail__c WHERE Quote__r.Name LIKE :\'%' + searchAccountName + '%\' AND Opportunity__r.Name LIKE :\'%' + searchOpportunityName + '%\' AND OwnerId = :searchOwnerId';
-
-        List<QuoteDetail__c> found = Database.query(query);
-
-        // 検索結果が50件を超えた場合
-        if (found.size() > 50) {
-            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, '検索結果が50件を超えています。絞り込み条件を変更してください。'));
-            searchResults = new List<WrapperQuoteDetail>();
-            return;
-        }
-
-        searchResults = new List<WrapperQuoteDetail>();
-        for (QuoteDetail__c qd : found) {
-            searchResults.add(new WrapperQuoteDetail(qd));
-        }
-    }
-
-
-1page
-画面遷移なし、操作がシンプルで分かりやすい
-小〜中規模データ向き
-画面構成が複雑になる恐れあり（UI設計に工夫が必要）
-2pages
-処理の分離により保守性・拡張性が高い
-検索・選択機能をリッチに設計可能
-画面遷移あり、ユーザーにとってやや手間になる可能性
-
-利点：
-ページ遷移なし：画面遷移なしでデータ操作ができ、スムーズな体験が提供されます。
-シンプルな画面維持：主画面はシンプルなままで、必要な操作をモーダルで行えます。
-統一されたUI：同じページ内で操作が完結し、ユーザーに一貫した体験を提供します。
-
-欠点：
-状態同期が複雑：モーダル内の操作後、主画面のデータ更新や同期が難しい場合があります。
-管理が煩雑：モーダルの開閉やデータ管理に追加のロジックが必要です。
-モバイル対応の問題：モバイル端末では表示や操作が最適化されていない可能性があります。
-
-```
 <apex:page controller="QuoteCopyController" sidebar="false" showHeader="true">
     <apex:form id="mainForm">
 
-        <!-- ✅ Toast メッセージ -->
-        <div id="toast" style="display:none; position:fixed; top:10px; right:20px; background:#0070d2; color:white; padding:10px 20px; border-radius:5px; z-index:10000;">
-            コピー成功！
-        </div>
+        <!-- ✅ 当前的見積明細（編集可能） -->
+        <apex:pageBlock title="現在の見積明細" id="quoteDetailsBlock">
+            <apex:pageBlockTable value="{!currentQuoteDetails}" var="qd">
+                <apex:column value="{!qd.Name}" headerValue="項目名" />
+                <apex:column headerValue="説明">
+                    <apex:inputText value="{!qd.Description__c}" />
+                </apex:column>
+                <apex:column headerValue="数量">
+                    <apex:inputText value="{!qd.Quantity__c}" />
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
 
-        <!-- ✅ 現在の見積明細リスト（編集可能） -->
-        <h2>現在の見積明細</h2>
-        <apex:outputPanel id="quoteDetailsBlock">
-            <apex:pageBlock title="見積明細一覧">
-                <apex:pageBlockTable value="{!currentQuoteDetails}" var="qd">
-                    <apex:column value="{!qd.Name}" headerValue="項目名" />
-                    <apex:column headerValue="説明">
-                        <apex:inputText value="{!qd.Description__c}" />
-                    </apex:column>
-                    <apex:column headerValue="数量">
-                        <apex:inputText value="{!qd.Quantity__c}" />
-                    </apex:column>
-                </apex:pageBlockTable>
-            </apex:pageBlock>
-        </apex:outputPanel>
+        <!-- ✅ モーダルボタン -->
+        <apex:commandButton value="他の見積からコピー" onclick="openModal(); return false;" styleClass="btn" />
 
-        <!-- ✅ モーダルを開くボタン -->
-        <apex:commandButton value="他の見積から明細をコピー" onclick="openModal(); return false;" styleClass="btn" />
+        <!-- ✅ モーダルダイアログ -->
+        <div id="copyModal" style="display:none; position:fixed; top:10%; left:10%; width:80%; height:80%; background:#fff; border:1px solid #ccc; padding:20px; z-index:9999; overflow:auto;">
+            <h3>他の見積を検索</h3>
 
-        <!-- ✅ モーダル ウィンドウ -->
-        <div id="copyModal" style="display:none; position:fixed; top:10%; left:10%; width:80%; height:75%; background:#fff; border:1px solid #ccc; box-shadow:0 0 15px #aaa; padding:20px; z-index:9999; overflow:auto;">
-            <h3>他の見積から明細をコピー</h3>
+            <!-- ✅ 検索条件 -->
+            <label>取引先名:</label>
+            <apex:inputText value="{!searchAccountName}" />
+            <br/>
+            <label>商談名:</label>
+            <apex:inputText value="{!searchOpportunityName}" />
+            <br/>
+            <label>Owner ID:</label>
+            <apex:inputText value="{!searchOwnerId}" />
+            <br/>
+            <apex:commandButton value="検索" action="{!searchQuotes}" rerender="quoteResults" styleClass="btn" />
 
-            <label>見積番号:</label>
-            <apex:inputText value="{!searchQuoteNumber}" />
-            <apex:commandButton value="検索" action="{!searchQuoteDetails}" rerender="searchResults" styleClass="btn" />
-
-            <apex:outputPanel id="searchResults">
-                <apex:pageBlock title="検索結果">
-                    <apex:pageBlockTable value="{!searchResults}" var="result">
+            <!-- ✅ 見積検索結果 -->
+            <apex:outputPanel id="quoteResults">
+                <apex:pageBlock title="検索結果: 見積">
+                    <apex:pageBlockTable value="{!searchQuoteWrappers}" var="q">
                         <apex:column headerValue="選択">
-                            <apex:inputCheckbox value="{!result.selected}" />
+                            <apex:inputCheckbox value="{!q.selected}" />
                         </apex:column>
-                        <apex:column value="{!result.detail.Name}" headerValue="項目名" />
-                        <apex:column value="{!result.detail.Description__c}" headerValue="説明" />
-                        <apex:column value="{!result.detail.Quantity__c}" headerValue="数量" />
+                        <apex:column value="{!q.quote.Name}" headerValue="見積名" />
+                        <apex:column value="{!q.quote.Account.Name}" headerValue="取引先" />
+                        <apex:column value="{!q.quote.Opportunity.Name}" headerValue="商談" />
+                    </apex:pageBlockTable>
+                    <apex:commandButton value="見積明細を表示" action="{!loadQuoteDetailsFromSelection}" rerender="detailResults" styleClass="btn" />
+                </apex:pageBlock>
+            </apex:outputPanel>
+
+            <!-- ✅ 見積明細表示部 -->
+            <apex:outputPanel id="detailResults">
+                <apex:pageBlock title="見積明細選択">
+                    <apex:pageBlockTable value="{!searchDetailWrappers}" var="d">
+                        <apex:column headerValue="選択">
+                            <apex:inputCheckbox value="{!d.selected}" />
+                        </apex:column>
+                        <apex:column value="{!d.detail.Name}" headerValue="項目名" />
+                        <apex:column value="{!d.detail.Description__c}" headerValue="説明" />
+                        <apex:column value="{!d.detail.Quantity__c}" headerValue="数量" />
                     </apex:pageBlockTable>
                 </apex:pageBlock>
             </apex:outputPanel>
 
-            <br/>
-            <apex:commandButton value="コピーする"
-                                action="{!copySelectedDetails}"
-                                rerender="quoteDetailsBlock"
-                                oncomplete="afterCopyDone();" styleClass="btn" />
+            <apex:commandButton value="コピー" action="{!copySelectedDetails}" rerender="quoteDetailsBlock" oncomplete="closeModal();" styleClass="btn" />
             <input type="button" value="閉じる" onclick="closeModal();" class="btn" />
         </div>
-
     </apex:form>
 
-    <!-- ✅ JS: モーダル制御 + トースト -->
+    <!-- ✅ JS -->
     <script>
         function openModal() {
             document.getElementById('copyModal').style.display = 'block';
@@ -145,157 +75,120 @@ public void searchQuoteDetails() {
         function closeModal() {
             document.getElementById('copyModal').style.display = 'none';
         }
-        function afterCopyDone() {
-            closeModal();
-            showToast('選択した見積明細がコピーされました。');
-        }
-        function showToast(msg) {
-            let toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2000);
-        }
     </script>
 
-    <!-- ✅ シンプルなスタイル -->
     <style>
         .btn {
             background-color: #0070d2;
             color: white;
+            padding: 6px 12px;
+            margin: 6px;
             border: none;
-            padding: 6px 14px;
-            margin: 5px;
             border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #005fb2;
         }
     </style>
 </apex:page>
 
-```
 
-
-```
 public class QuoteCopyController {
 
     public List<QuoteDetail__c> currentQuoteDetails { get; set; }
-    public String searchQuoteNumber { get; set; }
-    public List<WrapperQuoteDetail> searchResults { get; set; }
+    public String searchAccountName { get; set; }
+    public String searchOpportunityName { get; set; }
+    public String searchOwnerId { get; set; }
+
+    public List<QuoteWrapper> searchQuoteWrappers { get; set; }
+    public List<QuoteDetailWrapper> searchDetailWrappers { get; set; }
 
     public QuoteCopyController() {
-        // 現在の見積IDを取得
         Id quoteId = ApexPages.currentPage().getParameters().get('quoteId');
-        currentQuoteDetails = [
-            SELECT Name, Description__c, Quantity__c
-            FROM QuoteDetail__c
-            WHERE Quote__c = :quoteId
-        ];
+        currentQuoteDetails = [SELECT Name, Description__c, Quantity__c FROM QuoteDetail__c WHERE Quote__c = :quoteId];
     }
 
-    public void searchQuoteDetails() {
-        List<QuoteDetail__c> found = [
-            SELECT Name, Description__c, Quantity__c, Quote__r.Name
-            FROM QuoteDetail__c
-            WHERE Quote__r.Name LIKE :('%' + searchQuoteNumber + '%')
-            LIMIT 50
-        ];
+    public void searchQuotes() {
+        String query = 'SELECT Id, Name, Account.Name, Opportunity.Name FROM Quote WHERE Name != null';
+        if (String.isNotBlank(searchAccountName)) {
+            query += ' AND Account.Name LIKE \'%' + String.escapeSingleQuotes(searchAccountName) + '%\'';
+        }
+        if (String.isNotBlank(searchOpportunityName)) {
+            query += ' AND Opportunity.Name LIKE \'%' + String.escapeSingleQuotes(searchOpportunityName) + '%\'';
+        }
+        if (String.isNotBlank(searchOwnerId)) {
+            query += ' AND OwnerId = \'' + String.escapeSingleQuotes(searchOwnerId) + '\'';
+        }
 
-        searchResults = new List<WrapperQuoteDetail>();
-        for (QuoteDetail__c qd : found) {
-            searchResults.add(new WrapperQuoteDetail(qd));
+        List<Quote> result = Database.query(query);
+        if (result.size() > 50) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, '検索結果が50件を超えました。絞り込んでください。'));
+            return;
+        }
+
+        searchQuoteWrappers = new List<QuoteWrapper>();
+        for (Quote q : result) {
+            searchQuoteWrappers.add(new QuoteWrapper(q));
+        }
+    }
+
+    public void loadQuoteDetailsFromSelection() {
+        Set<Id> selectedQuoteIds = new Set<Id>();
+        for (QuoteWrapper wrap : searchQuoteWrappers) {
+            if (wrap.selected) {
+                selectedQuoteIds.add(wrap.quote.Id);
+            }
+        }
+
+        searchDetailWrappers = new List<QuoteDetailWrapper>();
+        if (!selectedQuoteIds.isEmpty()) {
+            List<QuoteDetail__c> details = [
+                SELECT Id, Name, Description__c, Quantity__c, Quote__c
+                FROM QuoteDetail__c
+                WHERE Quote__c IN :selectedQuoteIds
+            ];
+            for (QuoteDetail__c d : details) {
+                searchDetailWrappers.add(new QuoteDetailWrapper(d));
+            }
         }
     }
 
     public void copySelectedDetails() {
         Id quoteId = ApexPages.currentPage().getParameters().get('quoteId');
         List<QuoteDetail__c> toInsert = new List<QuoteDetail__c>();
-
-        for (WrapperQuoteDetail wrap : searchResults) {
+        for (QuoteDetailWrapper wrap : searchDetailWrappers) {
             if (wrap.selected) {
                 QuoteDetail__c copy = wrap.detail.clone(false, false, false, false);
                 copy.Quote__c = quoteId;
                 toInsert.add(copy);
             }
         }
-
         if (!toInsert.isEmpty()) {
             insert toInsert;
         }
 
-        // コピー後、現在の見積明細を再取得して更新
-        currentQuoteDetails = [
-            SELECT Name, Description__c, Quantity__c
-            FROM QuoteDetail__c
-            WHERE Quote__c = :quoteId
-        ];
+        // 再取得
+        currentQuoteDetails = [SELECT Name, Description__c, Quantity__c FROM QuoteDetail__c WHERE Quote__c = :quoteId];
     }
 
-    public class WrapperQuoteDetail {
+    public class QuoteWrapper {
+        public Quote quote { get; set; }
+        public Boolean selected { get; set; }
+        public QuoteWrapper(Quote q) {
+            this.quote = q;
+            this.selected = false;
+        }
+    }
+
+    public class QuoteDetailWrapper {
         public QuoteDetail__c detail { get; set; }
         public Boolean selected { get; set; }
-
-        public WrapperQuoteDetail(QuoteDetail__c d) {
+        public QuoteDetailWrapper(QuoteDetail__c d) {
             this.detail = d;
             this.selected = false;
         }
     }
 }
-```
 
-<apex:page controller="TableController">
-    <apex:form>
-        <apex:pageBlock title="データ一覧">
-            <!-- スクロール可能なテーブルのラッパー -->
-            <apex:outputPanel layout="block" style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc; display: block;">
-                <apex:pageBlockTable value="{!contacts}" var="con" styleClass="scrollableTable">
-                    <apex:column headerValue="Id">
-                        <apex:outputText value="{!con.Id}" />
-                    </apex:column>
-                    <apex:column>
-                        <apex:facet name="header">
-                            <span class="stickyHeader">名前</span>
-                        </apex:facet>
-                        <apex:outputText value="{!con.Name}" />
-                    </apex:column>
-                    <apex:column>
-                        <apex:facet name="header">
-                            <span class="stickyHeader">メール</span>
-                        </apex:facet>
-                        <apex:outputText value="{!con.Email}" />
-                    </apex:column>
-                </apex:pageBlockTable>
-            </apex:outputPanel>
-        </apex:pageBlock>
-    </apex:form>
 
-    <!-- ヘッダー固定用の CSS -->
-    <style>
-        .scrollableTable {
-            width: 100%;
-            border-collapse: collapse;
-        }
 
-        /* Stickyヘッダーの設定 */
-        .stickyHeader {
-            position: sticky;
-            top: 0;
-            background: #f8f8f8;
-            z-index: 2;
-            display: block;
-            padding: 8px;
-            font-weight: bold;
-            border-bottom: 2px solid #ccc;
-        }
-
-        .scrollableTable td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
-</apex:page>
 
 
 ```
