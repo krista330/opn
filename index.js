@@ -1,3 +1,76 @@
+◼ Rationale for Each Recommendation
+
+1. Disable Public IP for Clusters
+
+Azure Databricks does not allow modifying IP settings after workspace creation.
+
+Clusters with Public IPs are potentially exposed to brute-force attacks or unauthorized internet access.
+
+Deploying a new workspace with VNet Injection and no Public IP ensures compute nodes remain isolated within a secure network boundary.
+
+2. Use Private Link for Workspaces
+
+Control plane traffic (UI, REST API) currently routes through the public internet.
+
+Using Azure Private Link limits access to Microsoft’s private backbone network.
+
+This helps prevent man-in-the-middle attacks, data interception, or spoofing and supports strict compliance requirements.
+
+3. Disable Public Network Access
+
+If public network access remains enabled, endpoints are discoverable from the internet.
+
+Even with Private Link, failing to disable public access can leave an unnecessary attack surface.
+
+Disabling public network access ensures full traffic isolation and enforces private-only connectivity.
+
+◼ Implementation Procedure
+
+Build a new workspace with VNet Injection + Private Link enabled
+
+Migrate clusters, jobs, and notebooks to the new workspace
+
+Configure Private DNS zones and routing
+
+Disable public network access for the new workspace
+
+Decommission legacy workspace
+
+◼ Cost Comparison Before and After
+
+Item
+
+Before
+
+After
+
+Notes
+
+Databricks Workspace
+
+Standard SKU (Public Access)
+
+Premium SKU + Private Link
+
+Monthly cost increase of several thousand yen
+
+Network / Private Endpoints
+
+Not Required
+
+Private Endpoints x 2–3
+
+Additional cost for Private Link + DNS zone setup
+
+Operational Overhead
+
+Minimal
+
+Initial setup required
+
+Includes testing, migration, and training
+
+
 ◼ Overview and Key Items
 
 This document outlines the proposed actions and rationale for addressing the following three VAPT (Vulnerability Assessment and Penetration Testing) recommendations:
