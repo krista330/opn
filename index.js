@@ -1,3 +1,133 @@
+◼ Overview and Key Items
+
+This document outlines the proposed actions and rationale for addressing the following three VAPT (Vulnerability Assessment and Penetration Testing) recommendations:
+
+Disable Public IP for ClustersPrevent direct internet exposure of compute nodes.
+
+Use Private Link for WorkspacesEnsure secure, private connectivity to Azure services.
+
+Disable Public Network Access to WorkspacesEliminate risks of unauthorized access over public networks.
+
+◼ Executive Summary
+
+Item
+
+Current Status
+
+Action Plan
+
+Rationale
+
+1. Clusters should disable Public IP
+
+Not Implemented
+
+Deploy new workspace with VNet Injection + No Public IP
+
+Existing workspaces do not allow configuration changes; prevents third-party access
+
+2. Workspaces should use Private Link
+
+Not Implemented
+
+Build new workspace with Private Link enabled
+
+Reduces risk by avoiding public control-plane exposure
+
+3. Workspaces should disable Public Network Access
+
+Not Implemented
+
+Disable public network access after Private Link setup
+
+Prevents unauthorized access from public internet
+
+◼ Details of Action Plan
+
+1. Disable Public IP for Clusters
+
+Current clusters are assigned Public IP addresses
+
+Databricks does not support retroactive IP configuration changes
+
+Create a new workspace with VNet Injection and disabled Public IP
+
+Migrate existing cluster templates, jobs, and notebooks accordingly
+
+2. Use Private Link for Workspace
+
+Current workspace access (UI/API) is exposed to public networks
+
+Use Azure Private Link to limit access to private Azure backbone
+
+Configure Private DNS zones for internal name resolution
+
+Gradually migrate resources to a Private Link-enabled new workspace
+
+3. Disable Public Network Access
+
+Workspaces currently accessible via public endpoints
+
+Can be disabled via Azure Portal or CLI once Private Link is verified
+
+Ensures all access paths are securely contained
+
+◼ Implementation Procedure
+
+Build a new workspace with VNet Injection + Private Link enabled
+
+Migrate clusters, jobs, and notebooks to the new workspace
+
+Configure Private DNS zones and routing
+
+Disable public network access for the new workspace
+
+Decommission legacy workspace
+
+◼ Cost Comparison Before and After
+
+Item
+
+Before
+
+After
+
+Notes
+
+Databricks Workspace
+
+Standard SKU (Public Access)
+
+Premium SKU + Private Link
+
+Monthly cost increase of several thousand yen
+
+Network / Private Endpoints
+
+Not Required
+
+Private Endpoints x 2–3
+
+Additional cost for Private Link + DNS zone setup
+
+Operational Overhead
+
+Minimal
+
+Initial setup required
+
+Includes testing, migration, and training
+
+◼ Expected Outcomes
+
+All access to Azure Databricks is secured via private networking
+
+Eliminates risk of unauthorized public access
+
+Meets compliance standards for industries such as finance, manufacturing, and government
+
+    
+
 <apex:page controller="QuoteCopyController" sidebar="false" showHeader="true">
     <apex:form id="mainForm">
 
