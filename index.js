@@ -1,3 +1,17 @@
+The main differences between Standard and Premium tiers regarding networking features are:
+
+Premium tier offers additional advanced networking capabilities like:
+
+Secure Cluster Connectivity
+Private Link support
+More advanced IP access controls
+Enhanced network security features
+
+
+Premium tier has better support for complex enterprise networking scenarios and more robust security implementations
+
+But for the core VNet Injection functionality itself - the ability to deploy Databricks in your own VNet - this is available in both Standard and Premium tiers.
+
 ◼ Rationale for Each Recommendation
 
 1. Disable Public IP for Clusters
