@@ -1,6 +1,58 @@
 {!REQUIRESCRIPT("/soap/ajax/51.0/connection.js")}
 {!REQUIRESCRIPT("/soap/ajax/51.0/apex.js")}
 
+// 現在の環境に基づいてベースURLを決定する改良版
+var currentUrl = window.location.href;
+var baseUrl = '';
+
+// コミュニティURLの検出（より信頼性の高い方法）
+if (currentUrl.indexOf('/s/') >= 0) {
+    // Experience Builder（コミュニティ）環境
+    var communityUrlParts = currentUrl.split('/s/');
+    if (communityUrlParts.length > 0) {
+        baseUrl = communityUrlParts[0]; // コミュニティのベースURL
+    }
+} else if (currentUrl.indexOf('lightning.force.com') >= 0) {
+    // Lightning Experience
+    baseUrl = '';
+} else if (currentUrl.indexOf('visualforce.com') >= 0) {
+    // Visualforce内
+    baseUrl = '';
+} else {
+    // 標準Salesforceまたはその他の環境
+    baseUrl = '';
+}
+
+// VFページへのURLを構築（コミュニティの場合はサイトプレフィックスを使用）
+var reportUrl = '';
+if (baseUrl) {
+    // コミュニティの場合は検出したベースURLを使用
+    reportUrl = baseUrl + '/apex/帳票ページ名';
+} else {
+    // 標準Salesforceの場合はサイトプレフィックスを使用
+    reportUrl = '{!$Site.Prefix}/apex/帳票ページ名';
+}
+
+// パラメータを付加
+var fullUrl = reportUrl + '?id={!Order.Id}&source=' + (baseUrl ? 'community' : 'standard');
+
+// デバッグ情報（問題があれば開発時にコンソールで確認できるよう）
+console.log('検出環境: ' + (baseUrl ? 'コミュニティ' : '標準Salesforce'));
+console.log('構築URL: ' + fullUrl);
+
+// 新しいウィンドウで開く
+try {
+    window.open(fullUrl, '_blank');
+} catch (e) {
+    console.error('ウィンドウを開く際にエラーが発生しました: ', e);
+    alert('帳票を開くことができませんでした。ポップアップがブロックされていないか確認してください。');
+}
+
+
+
+{!REQUIRESCRIPT("/soap/ajax/51.0/connection.js")}
+{!REQUIRESCRIPT("/soap/ajax/51.0/apex.js")}
+
 // 現在の環境に基づいてベースURLを設定
 var currentUrl = window.location.href;
 var baseUrl = '';
