@@ -1,7 +1,18 @@
-{!REQUIRESCRIPT("/soap/ajax/30.0/connection.js")}
-{!REQUIRESCRIPT("/soap/ajax/30.0/apex.js")}
-var communityUrl = '{!$Site.BaseUrl}';
-var url = communityUrl + '/apex/ReportPage?id={!Order.Id}';
+{!REQUIRESCRIPT("/soap/ajax/51.0/connection.js")}
+{!REQUIRESCRIPT("/soap/ajax/51.0/apex.js")}
+
+// コミュニティのベースURLを取得
+var baseUrl = '';
+if (typeof(SfdcApp) !== 'undefined') {
+    // 標準Salesforce環境
+    baseUrl = '';
+} else {
+    // コミュニティ環境
+    baseUrl = '{!$Site.BaseUrl}';
+}
+
+// VFページへのURLを構築
+var url = baseUrl + '/apex/帳票ページ名?id={!Order.Id}';
 window.open(url, '_blank');
 
 
