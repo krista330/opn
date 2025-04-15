@@ -1,20 +1,30 @@
 {!REQUIRESCRIPT("/soap/ajax/51.0/connection.js")}
 {!REQUIRESCRIPT("/soap/ajax/51.0/apex.js")}
 
-// コミュニティのベースURLを取得
+// 現在の環境に基づいてベースURLを設定
+var currentUrl = window.location.href;
 var baseUrl = '';
-if (typeof(SfdcApp) !== 'undefined') {
-    // 標準Salesforce環境
+
+if (currentUrl.indexOf('lightning.force.com') >= 0) {
+    // Lightning Experience
     baseUrl = '';
-} else {
+} else if (currentUrl.indexOf('visualforce.com') >= 0) {
+    // Visualforce内
+    baseUrl = '';
+} else if (currentUrl.indexOf('.force.com/') >= 0 && currentUrl.indexOf('/s/') >= 0) {
     // コミュニティ環境
     baseUrl = '{!$Site.BaseUrl}';
+} else {
+    // 標準Salesforce
+    baseUrl = '';
 }
 
 // VFページへのURLを構築
-var url = baseUrl + '/apex/帳票ページ名?id={!Order.Id}';
-window.open(url, '_blank');
+var reportUrl = baseUrl + '/apex/帳票ページ名';
+var fullUrl = reportUrl + '?id={!Order.Id}&source=community';
 
+// 新しいウィンドウで開く
+window.open(fullUrl, '_blank');
 
 
 Key Differences Between Azure Databricks Standard and Premium Tiers
