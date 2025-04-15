@@ -1,3 +1,11 @@
+{!REQUIRESCRIPT("/soap/ajax/30.0/connection.js")}
+{!REQUIRESCRIPT("/soap/ajax/30.0/apex.js")}
+var communityUrl = '{!$Site.BaseUrl}';
+var url = communityUrl + '/apex/ReportPage?id={!Order.Id}';
+window.open(url, '_blank');
+
+
+
 Key Differences Between Azure Databricks Standard and Premium Tiers
 Pricing Differentials
 
