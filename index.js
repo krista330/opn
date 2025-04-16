@@ -1,3 +1,66 @@
+<apex:page showHeader="false" sidebar="false">
+    <apex:form >
+        <!-- モーダル背景 -->
+        <apex:outputPanel id="modalPanel" layout="block" styleClass="modal-overlay" rendered="{!showModal}">
+            
+            <!-- モーダル本体 -->
+            <div class="modal-content">
+                <!-- ✕ ボタン -->
+                <span class="close-button" onclick="closeModal()">×</span>
+                
+                <h3>モーダル画面</h3>
+                <p>ここに内容を表示</p>
+            </div>
+        </apex:outputPanel>
+
+        <!-- モーダルを開くボタン -->
+        <apex:commandButton value="モーダルを開く" action="{!openModal}" rerender="modalPanel" />
+
+        <script>
+            function closeModal() {
+                // Apex コントローラの showModal を false にして再レンダリング
+                document.querySelector('[name$="closeModalButton"]').click();
+            }
+        </script>
+
+        <!-- Apex:commandButton で裏側でコントローラ変数更新用 -->
+        <apex:commandButton id="closeModalButton" action="{!closeModal}" style="display:none" rerender="modalPanel"/>
+    </apex:form>
+
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            position: relative;
+            margin: 10% auto;
+            padding: 20px;
+            background: white;
+            width: 50%;
+            border-radius: 8px;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #888;
+        }
+        .close-button:hover {
+            color: #000;
+        }
+    </style>
+</apex:page>
+
+
+
+
 {!REQUIRESCRIPT("/soap/ajax/51.0/connection.js")}
 {!REQUIRESCRIPT("/soap/ajax/51.0/apex.js")}
 
