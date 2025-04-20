@@ -1,3 +1,7 @@
+URLFOR($Page.DS_customerCopyPDF, null, [ "id" = Id, "type" = "ds" ])
+
+
+
 HYPERLINK(
   "https://eponogolf--devgolf5.sandbox.my.site.com/s/dsportal/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
   "注文書 PDF",
