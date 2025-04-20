@@ -1,3 +1,10 @@
+HYPERLINK(
+  "https://eponogolf--devgolf5.sandbox.my.site.com/s/dsportal/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
+  "注文書 PDF",
+  "_blank"
+)
+
+
 IF(
   $Profile.UserType = "Standard",
   /* 内部用户 */
