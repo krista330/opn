@@ -2,13 +2,13 @@ IF(
   $Profile.UserType = "Standard",
   /* 内部用户 */
   HYPERLINK(
-    "/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
+    "/apex/DS_customerCopyPDF?id=" & Id,
     "注文書 PDF",
     "_blank"
   ),
   /* Community User */
   HYPERLINK(
-    $Site.Prefix & "/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
+    SUBSTITUTE($Site.BaseUrl, "/s", "") & "/apex/DS_customerCopyPDF?id=" & Id,
     "注文書 PDF",
     "_blank"
   )
