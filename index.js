@@ -1,3 +1,8 @@
+
+{!URLFOR($Page.DS_customerCopyPDF, null, [id=DirectlyOrder__c.Id, type='ds'])}
+
+
+
 javascript:window.open(
   "{!$Site.BaseUrl}/dsportal/apex/DS_customerCopyPDF?id={!Id}&type=ds",
   "_blank"
