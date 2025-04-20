@@ -2,6 +2,8 @@ javascript:window.open(
   "{!$Site.BaseUrl}/dsportal/apex/DS_customerCopyPDF?id={!Id}&type=ds",
   "_blank"
 );
+javascript:window.open('{!$Site.BaseUrl}/apex/DS_customerCopyPDF?id={!Id}&type=ds','_blank');
+
 
 
 
