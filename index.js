@@ -1,5 +1,22 @@
 IF(
   $Profile.UserType = "Standard",
+  /* 内部用户 */
+  HYPERLINK(
+    "/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
+    "注文書 PDF",
+    "_blank"
+  ),
+  /* Community User */
+  HYPERLINK(
+    $Site.Prefix & "/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
+    "注文書 PDF",
+    "_blank"
+  )
+)
+
+
+IF(
+  $Profile.UserType = "Standard",
   /* 内部用户的链接 */
   HYPERLINK(
     "https://" & $Api.Partner_Server_URL_370 & "/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
