@@ -1,3 +1,20 @@
+IF(
+  $Profile.UserType = "Standard",
+  /* 内部用户的链接 */
+  HYPERLINK(
+    "https://" & $Api.Partner_Server_URL_370 & "/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
+    "注文書 PDF",
+    "_blank"
+  ),
+  /* Community 用户的链接 */
+  HYPERLINK(
+    "https://epongolf--devgolf5.sandbox.my.site.com/s/dsportal/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
+    "注文書 PDF",
+    "_blank"
+  )
+)
+
+
 <apex:page showHeader="false" sidebar="false">
     <apex:form >
         <!-- モーダル背景 -->
