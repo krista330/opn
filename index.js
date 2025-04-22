@@ -1,5 +1,11 @@
 javascript:window.open('{!$Site.BaseUrl}/apex/DS_customerCopyPDF?id={!account.Id}&type=ds','_blank');
 
+HYPERLINK(
+  $Site.BaseUrl & "/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
+  "注文書 PDF",
+  "_blank"
+)
+
 
 
 
