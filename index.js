@@ -1,3 +1,8 @@
+javascript:window.open('{!$Site.BaseUrl}/apex/DS_customerCopyPDF?id={!account.Id}&type=ds','_blank');
+
+
+
+
 Microsoft Defender for Cloud’s DevOps Security enables early detection and remediation of security issues during the development lifecycle. Here's what it can do:
 
 1. Security Analysis for Code and Infrastructure
