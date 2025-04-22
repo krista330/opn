@@ -6,6 +6,21 @@ HYPERLINK(
   "_blank"
 )
 
+管理者ユーザーが Community 上でリンクを開ける理由：
+1. 管理者はすべてのアクセス権限を持っているから
+管理者プロファイルには、該当の Visualforce ページや Apex クラスに対してすべてのアクセス権がデフォルトで付与されています。
+→ Community のコンテキストであっても制限を受けません。
+
+2. 管理者はサイトのルーティング制限を無視できる
+たとえ URL に /apex/DS_customerCopyPDF のような直接リンクを使っていたとしても、管理者は Salesforce 全体のリソースにアクセスできるため、ルーティングの制限をバイパスできます。
+
+3. Visualforce ページが正しく登録されていなくても開ける場合がある
+Community ユーザーには Site の Guest User Profile または Login User Profile に明示的に Visualforce ページのアクセス権を与える必要がありますが、管理者はその制約を受けません。
+
+逆に、Community User が開けないのはなぜ？
+Visualforce ページが「Experience Builder site 向け」に有効化されていない
+ユーザーのプロファイルにそのページのアクセス権がない
+/apex/DS_customerCopyPDF のようなパスが Community サイトでは無効（正しくは $Site.BaseUrl + "/apex/..." を使うべき）
 
 
 
