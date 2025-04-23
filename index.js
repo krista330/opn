@@ -1,3 +1,11 @@
+<style>
+    .multi-picklist-fix select[multiple] {
+        height: auto !important;
+        min-height: 100px; /* 調整して4行分の高さに */
+    }
+</style>
+
+
 javascript:window.open('{!$Site.BaseUrl}/apex/DS_customerCopyPDF?id={!account.Id}&type=ds','_blank');
 
 HYPERLINK(
