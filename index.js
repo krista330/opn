@@ -1,18 +1,53 @@
-<style>
-    .multi-picklist-fix select[multiple] {
-        height: auto !important;
-        min-height: 100px; /* 調整して4行分の高さに */
-    }
-</style>
+ Prevents Exposure to the Public Internet
+When public IPs are enabled, each worker and driver node in your Databricks cluster can potentially be assigned a public IP address, meaning it is accessible from the internet (though firewalled).
+
+By disabling public IPs, all network interfaces remain private within the Azure VNet — completely removing the attack surface from the internet.
+
+This ensures that only internal systems or trusted endpoints can communicate with Databricks resources.
+
+2. Leverages Azure NSGs (Network Security Groups) for Strict Access Control
+With public IPs disabled, all cluster traffic flows through private subnets managed by you.
+
+You can apply fine-grained NSG rules at the subnet level to:
+
+Allow or deny access based on IP ranges
+
+Limit traffic to specific ports/protocols
+
+Enforce segmentation between services (e.g., only certain services can talk to Databricks)
+
+5. Mitigates Common Cloud Security Threats
+Threat Type	Mitigation by Disabling Public IP
+Port scanning & brute-force	No public entry points to scan or exploit
+Data exfiltration via outbound rules	Control via NSGs or Azure Firewall/NAT
+Misconfiguration risks	Even if apps are misconfigured, they aren’t externally accessible
+Malware command & control access	Outbound control via NAT Gateway allows logging and control
 
 
-javascript:window.open('{!$Site.BaseUrl}/apex/DS_customerCopyPDF?id={!account.Id}&type=ds','_blank');
 
-HYPERLINK(
-  $Site.BaseUrl & "/apex/DS_customerCopyPDF?id=" & Id & "&type=ds",
-  "注文書 PDF",
-  "_blank"
-)
+2. Required Configuration Changes
+Key configuration changes when disabling Public IPs:
+Component	Required Change
+Cluster Configuration	Select No Public IP during cluster creation (via UI or API)
+VNet	VNet Injection is mandatory (i.e., use a custom VNet)
+NAT Gateway	Required for outbound internet access (replaces Public IPs)
+Route Table	Configure appropriate routes to direct traffic through NAT Gateway
+NSG (Network Security Group)	Apply NSGs to private subnets to restrict access (e.g., by ports or IP ranges)
+Private Link (Optional)	Use Private Endpoints for Workspace, DBFS, REST APIs, etc. (recommended)
+
+
+Cost Impact (Regarding NAT Gateway)
+Considerations on cost:
+Item	Description
+NAT Gateway Deployment	When No Public IP is selected, a NAT Gateway is required for outbound traffic (e.g., installing packages via PyPI or apt).
+Reuse Existing NAT Gateway?	Yes, you can reuse an existing NAT Gateway within the same VNet and region.
+Additional Costs	Creating a new NAT Gateway may cost around ¥3,000/month (fixed) plus traffic-based charges.
+Savings on Public IPs	Disabling per-cluster Public IPs (which incur charges) can offset NAT Gateway costs, possibly leading to cost savings.
+☑ If you already have a NAT Gateway in place, additional costs are minimal.
+☑ For large volumes of traffic, NAT Gateway is more scalable and secure than public IPs.
+
+
+    
 管理者ユーザーが Community Site にログインして、Community 上のレコード詳細ページからカスタムリンクをクリックした場合でも、Visualforce ページを正常に開ける理由は以下の通りです：
 
 管理者ユーザーが Community 上でリンクを開ける理由：
