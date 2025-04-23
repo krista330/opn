@@ -47,6 +47,69 @@ Savings on Public IPs	Disabling per-cluster Public IPs (which incur charges) can
 ☑ For large volumes of traffic, NAT Gateway is more scalable and secure than public IPs.
 
 
+ ++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+ ✅ 1. How Restricting IP Access Enhances Security
+🔐 Security Improvements by Restricting Workspace IP Access:
+Limits access to trusted IP ranges only:
+By defining allowed IP ranges (such as corporate VPN or specific office IPs), you prevent unauthorized users from even reaching the login page of the Databricks workspace.
+
+Mitigates external threats:
+IP restriction acts as a first line of defense against:
+
+Brute-force login attempts
+
+Unauthorized access from unknown networks
+
+Exploitation of misconfigured permissions
+
+Supports compliance requirements:
+Many security frameworks (e.g., CIS, NIST, ISO 27001, SOC 2) recommend or mandate IP allowlisting for administrative interfaces.
+
+Protects against session hijacking:
+Restricting sessions to specific IP ranges limits the risk of compromised access tokens being reused from untrusted networks.
+
+🛠️ 2. Required Configuration Changes
+Step-by-step Overview:
+Component	Required Changes
+Azure Databricks Workspace	Use "Access Control Lists" or "IP Access Lists" to define allowed CIDR blocks via Azure CLI or REST API.
+Each entry includes a label, CIDR range, and priority.
+
+You can allow specific IPs (e.g., 203.0.113.5/32) or ranges (e.g., 203.0.113.0/24). | | Workspace Admin Configuration | You need "Azure Databricks Admin" privileges to set IP access lists. | | Fallback IPs (optional) | You can define fallback access for specific admin IPs to avoid lockouts. | | VNet / NAT Gateway (if Public IP is disabled) | If you're restricting workspace access and also disabling public IPs for clusters, ensure that:
+
+NAT Gateway routes outbound traffic
+
+Private endpoints or VNet peering is configured for internal access |
+
+Example IP access list command:
+bash
+コピーする
+編集する
+databricks workspace-conf set-status --json '{
+  "enableIpAccessLists": true
+}'
+databricks ip-access-list create --json '{
+  "label": "AllowCorpVPN",
+  "list_type": "ALLOW",
+  "ip_addresses": ["203.0.113.0/24"],
+  "enabled": true
+}'
+💰 3. Cost Impact (NAT Gateway Considerations)
+Important Notes:
+Item	Description
+IP restrictions themselves	No additional cost — applying IP access rules on the workspace is a free security feature in Azure Databricks.
+NAT Gateway	Only needed if you're disabling public IPs for the clusters (not related to workspace IP restriction directly).
+Reusing Existing NAT Gateway	✅ Yes, you can reuse existing NAT Gateway for outbound traffic from multiple subnets or clusters.
+NAT Gateway supports up to 50,000 concurrent flows, making it suitable for shared usage.	
+New NAT Gateway Cost (if required)	~¥3,000/month + bandwidth costs — but may be offset by reducing Public IPs used on VMs or clusters.
+🎯 Recommendation Summary
+Perspective	Recommendation
+Security	✅ Strongly recommended to restrict IP access to trusted networks. Drastically reduces exposure and aligns with compliance standards.
+Configuration	🛠 Easy to configure using Azure CLI or Databricks REST API. Supports allow/block lists and admin fallbacks.
+Cost	💡 No cost for the IP restriction feature itself. NAT Gateway cost only applies if you're combining this with private networking. Reuse existing NAT Gateway if possible.
+ 
+
     
 管理者ユーザーが Community Site にログインして、Community 上のレコード詳細ページからカスタムリンクをクリックした場合でも、Visualforce ページを正常に開ける理由は以下の通りです：
 
