@@ -1,4 +1,10 @@
- Prevents Exposure to the Public Internet
+Based on the previous assessment, option A appears to be the more suitable choice.
+
+However, considering the VAPT recommendations and cost efficiency, option B can also be used for static code analysis. We kindly request the MOL team to re-evaluate both tools and provide further guidance.
+
+
+
+Prevents Exposure to the Public Internet
 When public IPs are enabled, each worker and driver node in your Databricks cluster can potentially be assigned a public IP address, meaning it is accessible from the internet (though firewalled).
 
 By disabling public IPs, all network interfaces remain private within the Azure VNet — completely removing the attack surface from the internet.
