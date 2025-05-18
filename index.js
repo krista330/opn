@@ -1,3 +1,21 @@
+✅ What is Soft Delete?
+Soft Delete is a data protection feature in Azure Storage that allows you to recover accidentally deleted data (blobs or containers) within a specified retention period. Instead of being permanently deleted, the data is marked as "soft-deleted" and remains recoverable for a defined number of days.
+
+📦 Types of Soft Delete
+Type	Description
+Blob Soft Delete	Protects individual blob files (including snapshots and versions) from deletion.
+Container Soft Delete	Allows recovery of an entire deleted container and all its contents.
+
+🛠️ How It Works
+When Soft Delete is enabled:
+
+Deleted items are not immediately removed from storage.
+
+They are retained in a recoverable state for a configurable retention period (1 to 365 days).
+
+During this time, data can be restored easily via API, SDK, CLI, or Azure Portal.
+
+
 Why You Should Consider Enabling Soft Delete
 Protection Against Accidental Deletion
 Soft Delete acts as a safety net by retaining deleted blobs or containers for a specified period, allowing for easy recovery in case of human error or application issues.
