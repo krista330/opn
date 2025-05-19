@@ -1,3 +1,18 @@
+Recommendation:
+We recommend continuing with Microsoft-managed keys (MMK) for the Azure Storage Account.
+
+Rationale:
+
+MMK fully meets our current compliance and security requirements.
+
+It requires no additional configuration or Key Vault integration, ensuring simpler implementation and lower operational risk.
+
+It avoids the cost and complexity associated with managing customer-managed keys (CMK), including rotation and high availability setup.
+
+Unless a future compliance policy mandates direct control of encryption keys, MMK remains the most efficient and cost-effective option for our environment.
+
+
+
 | Aspect             | Microsoft-managed Keys (MMK)                               | Customer-managed Keys (CMK)                                         |
 | ------------------ | ---------------------------------------------------------- | ------------------------------------------------------------------- |
 | **Compliance**     | Meets general standards (e.g., ISO, GDPR, HIPAA)           | Suitable for strict regulations (e.g., finance, government, FIPS)   |
