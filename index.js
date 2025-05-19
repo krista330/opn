@@ -1,3 +1,6 @@
+"CMK implementation requires additional setup, monitoring, and key rotation processes, increasing management complexity and cost."
+"The use of CMK adds infrastructure dependencies (e.g., Key Vault availability), which increases administrative effort and risk."
+
 Recommendation:
 We recommend continuing with Microsoft-managed keys (MMK) for the Azure Storage Account.
 
