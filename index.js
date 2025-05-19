@@ -1,3 +1,20 @@
+"Migrating from MMK to CMK introduces high operational risk."
+
+Key reasons:
+
+Key misconfiguration or Key Vault unavailability can result in data inaccessibility.
+
+Requires precise setup of access controls, key rotation, and availability zones.
+
+Any errors in CMK management (e.g., key deletion or expiration) may disrupt application access to the storage account.
+
+Unlike MMK, CMK makes the environment more sensitive to human error and system dependencies.
+
+🧩 另一种表达方式（用于决策场合）
+"Switching to CMK significantly increases the risk of service disruption due to its complexity and dependency on Key Vault availability and correct key management practices."
+
+
+
 "CMK implementation requires additional setup, monitoring, and key rotation processes, increasing management complexity and cost."
 "The use of CMK adds infrastructure dependencies (e.g., Key Vault availability), which increases administrative effort and risk."
 
