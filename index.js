@@ -1,3 +1,10 @@
+StorageBlobLogs
+| where AuthenticationType == "SAS"
+| project TimeGenerated, OperationName, RequesterIPAddress, Uri, StatusCode, AccountName, UserAgentHeader
+| sort by TimeGenerated desc
+
+
+
 "Migrating from MMK to CMK introduces high operational risk."
 
 Key reasons:
