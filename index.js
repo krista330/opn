@@ -1,3 +1,6 @@
+https://learn.microsoft.com/en-us/answers/questions/1526971/enabling-availability-zones-for-azure-cosmos-db-fo?utm_source=chatgpt.com
+
+
 1. Executive Summary
 
 In order to minimize the security exposure associated with Shared Access Signatures (SAS) in Azure Storage, it is recommended to use short-lived tokens (e.g., valid for 1 hour or less). This document outlines the justification for this best practice, as well as the potential risks and limitations.
