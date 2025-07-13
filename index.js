@@ -1,3 +1,38 @@
+Under SCC mode, Databricks clusters no longer use the default public IP ranges published in the "Outbound from Azure Databricks control plane" documentation.
+
+Instead, all outbound traffic from the clusters is routed through the Virtual Network (VNet) associated with the workspace.
+
+If a NAT Gateway is configured for the VNet, the public IP address of the NAT Gateway becomes the new source IP for all outbound connections, including those to Azure services such as Key Vault, Storage Accounts, etc.
+
+In environments where no NAT Gateway is explicitly configured, Azure may still assign an ephemeral outbound IP through default mechanisms. However, this IP is subject to change and may not be stable for allowlisting purposes.
+
+⚠️ Impact on External Resources (e.g., Key Vault):
+Any services with firewall restrictions (such as Azure Key Vault or Storage Accounts) that were previously configured to allow access based on Databricks’ published outbound IPs must be updated.
+
+Specifically, those services must now include the public IP address(es) of the VNet’s NAT Gateway in their access control lists (ACLs) to maintain uninterrupted access.
+
+✅ Action Required:
+Identify the public IP(s) associated with the NAT Gateway used by your Databricks workspace.
+
+Update the Networking settings of Key Vault (or other services) to allow these IP addresses.
+
+Optionally remove the previously configured Databricks outbound IPs from the access list if they are no longer applicable.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Supporting Documentation (Microsoft):
 https://learn.microsoft.com/en-us/azure/databricks/security/network/front-end/ip-access-list-workspace
 
